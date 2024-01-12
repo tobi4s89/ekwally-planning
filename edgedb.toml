@@ -1,0 +1,5 @@
+[edgedb]
+server-version = "4.4"
+
+[project]
+schema-dir = "./core/db"
