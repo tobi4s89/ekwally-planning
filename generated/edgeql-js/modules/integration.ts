@@ -3,56 +3,56 @@
 import * as $ from "../reflection";
 import * as _ from "../imports";
 import type * as _std from "./std";
-import type * as _userIntegration from "./userIntegration";
-export type $BaseIntegrationλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+import type * as _UserIntegration from "./UserIntegration";
+export type $BaseλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "created_at": $.PropertyDesc<_std.$datetime, $.Cardinality.One, false, false, false, true>;
   "is_active": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, true>;
   "modified_at": $.PropertyDesc<_std.$datetime, $.Cardinality.One, false, false, false, true>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "<integration[is userIntegration::UserIntegration]": $.LinkDesc<_userIntegration.$UserIntegration, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<integration[is UserIntegration::Relation]": $.LinkDesc<_UserIntegration.$Relation, $.Cardinality.Many, {}, false, false,  false, false>;
   "<integration": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
-type $BaseIntegration = $.ObjectType<"integration::BaseIntegration", $BaseIntegrationλShape, null, [
+type $Base = $.ObjectType<"Integration::Base", $BaseλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
 ]>;
-const $BaseIntegration = $.makeType<$BaseIntegration>(_.spec, "a07ba24a-b0bf-11ee-b294-091a50917bb1", _.syntax.literal);
+const $Base = $.makeType<$Base>(_.spec, "77b9c9fc-b184-11ee-896f-d9b4ca7f0854", _.syntax.literal);
 
-const BaseIntegration: $.$expr_PathNode<$.TypeSet<$BaseIntegration, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($BaseIntegration, $.Cardinality.Many), null);
+const Base: $.$expr_PathNode<$.TypeSet<$Base, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Base, $.Cardinality.Many), null);
 
-export type $PicnicIntegrationλShape = $.typeutil.flatten<$BaseIntegrationλShape & {
+export type $PicnicλShape = $.typeutil.flatten<$BaseλShape & {
   "email": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "password_hash": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
 }>;
-type $PicnicIntegration = $.ObjectType<"integration::PicnicIntegration", $PicnicIntegrationλShape, null, [
-  ...$BaseIntegration['__exclusives__'],
+type $Picnic = $.ObjectType<"Integration::Picnic", $PicnicλShape, null, [
+  ...$Base['__exclusives__'],
 ]>;
-const $PicnicIntegration = $.makeType<$PicnicIntegration>(_.spec, "a07d1170-b0bf-11ee-b65d-bb08360db3ce", _.syntax.literal);
+const $Picnic = $.makeType<$Picnic>(_.spec, "77bb3094-b184-11ee-bdc2-e5d04fddc872", _.syntax.literal);
 
-const PicnicIntegration: $.$expr_PathNode<$.TypeSet<$PicnicIntegration, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($PicnicIntegration, $.Cardinality.Many), null);
+const Picnic: $.$expr_PathNode<$.TypeSet<$Picnic, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Picnic, $.Cardinality.Many), null);
 
-export type $TrelloIntegrationλShape = $.typeutil.flatten<$BaseIntegrationλShape & {
+export type $TrelloλShape = $.typeutil.flatten<$BaseλShape & {
   "api_key": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "api_token": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
 }>;
-type $TrelloIntegration = $.ObjectType<"integration::TrelloIntegration", $TrelloIntegrationλShape, null, [
-  ...$BaseIntegration['__exclusives__'],
+type $Trello = $.ObjectType<"Integration::Trello", $TrelloλShape, null, [
+  ...$Base['__exclusives__'],
 ]>;
-const $TrelloIntegration = $.makeType<$TrelloIntegration>(_.spec, "a07e7074-b0bf-11ee-9358-f37f1617407b", _.syntax.literal);
+const $Trello = $.makeType<$Trello>(_.spec, "77bc77e2-b184-11ee-bd83-1bceae6c7709", _.syntax.literal);
 
-const TrelloIntegration: $.$expr_PathNode<$.TypeSet<$TrelloIntegration, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($TrelloIntegration, $.Cardinality.Many), null);
+const Trello: $.$expr_PathNode<$.TypeSet<$Trello, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Trello, $.Cardinality.Many), null);
 
 
 
-export { $BaseIntegration, BaseIntegration, $PicnicIntegration, PicnicIntegration, $TrelloIntegration, TrelloIntegration };
+export { $Base, Base, $Picnic, Picnic, $Trello, Trello };
 
 type __defaultExports = {
-  "BaseIntegration": typeof BaseIntegration;
-  "PicnicIntegration": typeof PicnicIntegration;
-  "TrelloIntegration": typeof TrelloIntegration
+  "Base": typeof Base;
+  "Picnic": typeof Picnic;
+  "Trello": typeof Trello
 };
 const __defaultExports: __defaultExports = {
-  "BaseIntegration": BaseIntegration,
-  "PicnicIntegration": PicnicIntegration,
-  "TrelloIntegration": TrelloIntegration
+  "Base": Base,
+  "Picnic": Picnic,
+  "Trello": Trello
 };
 export default __defaultExports;

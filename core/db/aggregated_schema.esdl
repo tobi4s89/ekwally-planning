@@ -1,5 +1,5 @@
-module integration {
-    abstract type BaseIntegration {
+module Integration {
+    abstract type Base {
         required property name: str;
         required property is_active: bool {
             default := false;
@@ -12,41 +12,41 @@ module integration {
         };
     }
 
-    type TrelloIntegration extending BaseIntegration {
+    type Trello extending Base {
         required property api_key: str;
         required property api_token: str;
     };
 
-    type PicnicIntegration extending BaseIntegration {
+    type Picnic extending Base {
         required property email: str;
         required property password_hash: str;
     };
 }
 using extension auth;
 
-module user {
+module User {
     global currentUser := (
-        select User
+        select Base
         filter .identity ?= global ext::auth::ClientTokenIdentity
     );
 
-    abstract type User {
+    abstract type Base {
         required identity: ext::auth::Identity {
             constraint exclusive;
         };
     };
 
-    type Account extending User {
+    type Account extending Base {
         required first_name: str;
         required last_name: str;
     };
 }
-module userIntegration {
-    type UserIntegration {
-        link user: user::User;
-        link integration: integration::BaseIntegration;
+module UserIntegration {
+    type Relation {
+        link user: User::Base;
+        link integration: Integration::Base;
 
         index on (.user);
         constraint exclusive on ((.user, .integration));
-    }
+    };
 }

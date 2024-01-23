@@ -4,7 +4,7 @@ import * as $ from "../../reflection";
 import * as _ from "../../imports";
 import type * as _cfg from "../cfg";
 import type * as _std from "../std";
-import type * as _user from "../user";
+import type * as _User from "../User";
 export type $FlowType = {
   "PKCE": $.$expr_Literal<$FlowType>;
   "Implicit": $.$expr_Literal<$FlowType>;
@@ -106,9 +106,9 @@ export type $IdentityλShape = $.typeutil.flatten<$AuditableλShape & {
   "issuer": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "subject": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "<identity[is ext::auth::PKCEChallenge]": $.LinkDesc<$PKCEChallenge, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<identity[is user::User]": $.LinkDesc<_user.$User, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
-  "<identity[is user::currentUser]": $.LinkDesc<_user.$currentUser, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<identity[is user::Account]": $.LinkDesc<_user.$Account, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
+  "<identity[is User::Base]": $.LinkDesc<_User.$Base, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
+  "<identity[is User::currentUser]": $.LinkDesc<_User.$currentUser, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<identity[is User::Account]": $.LinkDesc<_User.$Account, $.Cardinality.AtMostOne, {}, true, false,  false, false>;
   "<identity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Identity = $.ObjectType<"ext::auth::Identity", $IdentityλShape, null, [

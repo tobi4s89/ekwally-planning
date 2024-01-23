@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { genericForwardRef } from '../../../utils'
+import { genericForwardRef } from '_shared/utils'
 
 type MyProps = {
     children: any,

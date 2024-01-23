@@ -12,9 +12,9 @@ import _ext from "./modules/ext";
 import _fts from "./modules/fts";
 import _schema from "./modules/schema";
 import _sys from "./modules/sys";
-import _integration from "./modules/integration";
-import _user from "./modules/user";
-import _userIntegration from "./modules/userIntegration";
+import _Integration from "./modules/Integration";
+import _User from "./modules/User";
+import _UserIntegration from "./modules/UserIntegration";
 import _math from "./modules/math";
 import _default from "./modules/default";
 
@@ -29,9 +29,9 @@ const ExportDefault: typeof _std &
   "fts": typeof _fts;
   "schema": typeof _schema;
   "sys": typeof _sys;
-  "integration": typeof _integration;
-  "user": typeof _user;
-  "userIntegration": typeof _userIntegration;
+  "Integration": typeof _Integration;
+  "User": typeof _User;
+  "UserIntegration": typeof _UserIntegration;
   "math": typeof _math;
   "default": typeof _default;
 } = {
@@ -46,9 +46,9 @@ const ExportDefault: typeof _std &
   "fts": _fts,
   "schema": _schema,
   "sys": _sys,
-  "integration": _integration,
-  "user": _user,
-  "userIntegration": _userIntegration,
+  "Integration": _Integration,
+  "User": _User,
+  "UserIntegration": _UserIntegration,
   "math": _math,
   "default": _default,
 };

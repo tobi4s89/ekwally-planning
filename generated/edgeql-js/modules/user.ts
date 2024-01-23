@@ -4,63 +4,63 @@ import * as $ from "../reflection";
 import * as _ from "../imports";
 import type * as _std from "./std";
 import type * as _auth from "./ext/auth";
-import type * as _userIntegration from "./userIntegration";
-export type $UserλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+import type * as _UserIntegration from "./UserIntegration";
+export type $BaseλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "identity": $.LinkDesc<_auth.$Identity, $.Cardinality.One, {}, true, false,  false, false>;
-  "<user[is userIntegration::UserIntegration]": $.LinkDesc<_userIntegration.$UserIntegration, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is UserIntegration::Relation]": $.LinkDesc<_UserIntegration.$Relation, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
-type $User = $.ObjectType<"user::User", $UserλShape, null, [
+type $Base = $.ObjectType<"User::Base", $BaseλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
   {identity: {__element__: _auth.$Identity, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $User = $.makeType<$User>(_.spec, "5e62dfee-ae8b-11ee-a286-77424e87291a", _.syntax.literal);
+const $Base = $.makeType<$Base>(_.spec, "77b27788-b184-11ee-b9b4-4f3ba5aca779", _.syntax.literal);
 
-const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($User, $.Cardinality.Many), null);
+const Base: $.$expr_PathNode<$.TypeSet<$Base, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Base, $.Cardinality.Many), null);
 
-export type $AccountλShape = $.typeutil.flatten<$UserλShape & {
+export type $AccountλShape = $.typeutil.flatten<$BaseλShape & {
   "first_name": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "last_name": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
 }>;
-type $Account = $.ObjectType<"user::Account", $AccountλShape, null, [
-  ...$User['__exclusives__'],
+type $Account = $.ObjectType<"User::Account", $AccountλShape, null, [
+  ...$Base['__exclusives__'],
 ]>;
-const $Account = $.makeType<$Account>(_.spec, "5e69fb3a-ae8b-11ee-87d6-bb9742b1ba39", _.syntax.literal);
+const $Account = $.makeType<$Account>(_.spec, "77c75342-b184-11ee-93c6-918b52e4b9a2", _.syntax.literal);
 
 const Account: $.$expr_PathNode<$.TypeSet<$Account, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Account, $.Cardinality.Many), null);
 
-export type $currentUserλShape = $.typeutil.flatten<$UserλShape & {
+export type $currentUserλShape = $.typeutil.flatten<$BaseλShape & {
 }>;
-type $currentUser = $.ObjectType<"user::currentUser", $currentUserλShape, null, [
-  ...$User['__exclusives__'],
+type $currentUser = $.ObjectType<"User::currentUser", $currentUserλShape, null, [
+  ...$Base['__exclusives__'],
 ]>;
-const $currentUser = $.makeType<$currentUser>(_.spec, "5e69d13c-ae8b-11ee-8c14-9fd771456b9c", _.syntax.literal);
+const $currentUser = $.makeType<$currentUser>(_.spec, "77b983ac-b184-11ee-bbd5-0f89841db3f5", _.syntax.literal);
 
 const currentUser: $.$expr_PathNode<$.TypeSet<$currentUser, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($currentUser, $.Cardinality.Many), null);
 
-const $user__globals: {  currentUser: _.syntax.$expr_Global<
-              // "user::currentUser",
+const $User__globals: {  currentUser: _.syntax.$expr_Global<
+              // "User::currentUser",
               $currentUser,
               $.Cardinality.Many
               >} = {  currentUser: _.syntax.makeGlobal(
-              "user::currentUser",
-              $.makeType(_.spec, "5e69d13c-ae8b-11ee-8c14-9fd771456b9c", _.syntax.literal),
+              "User::currentUser",
+              $.makeType(_.spec, "77b983ac-b184-11ee-bbd5-0f89841db3f5", _.syntax.literal),
               $.Cardinality.Many) as any};
 
 
 
-export { $User, User, $Account, Account, $currentUser, currentUser };
+export { $Base, Base, $Account, Account, $currentUser, currentUser };
 
 type __defaultExports = {
-  "User": typeof User;
+  "Base": typeof Base;
   "Account": typeof Account;
   "currentUser": typeof currentUser;
-  "global": typeof $user__globals
+  "global": typeof $User__globals
 };
 const __defaultExports: __defaultExports = {
-  "User": User,
+  "Base": Base,
   "Account": Account,
   "currentUser": currentUser,
-  "global": $user__globals
+  "global": $User__globals
 };
 export default __defaultExports;

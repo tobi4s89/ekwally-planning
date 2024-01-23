@@ -7,9 +7,9 @@
     "dev": "NODE_ENV=development PORT=443 BASE_URL=https://localhost tsx --inspect ./express-entry.ts",
     "build": "vite build",
     "preview": "NODE_ENV=production tsx ./express-entry.ts",
-    "edgedb:generate-queries": "@edgedb/generate queries",
-    "generate-edgeql": "npx @edgedb/generate edgeql-js --output-dir ./generated/edgeql-js --target ts && npx @edgedb/generate interfaces --file ./generated/interfaces.ts",
-    "migrate:all": "tsx ./bin/moduleMigration.ts",
+    "generate:queries": "@edgedb/generate queries",
+    "generate:edgeql": "npx @edgedb/generate edgeql-js --output-dir ./generated/edgeql-js --target ts && npx @edgedb/generate interfaces --file ./generated/interfaces.ts",
+    "migrate:all": "tsx ./bin/moduleMigration.ts && pnpm generate:edgeql",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "keywords": [],

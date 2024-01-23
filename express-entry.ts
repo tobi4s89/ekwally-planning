@@ -68,6 +68,13 @@ async function startServer() {
 
     /**
      * Domain registration
+     * 
+     * Todo: Make context only (global) available for domains with type relation.
+     * Only relations should be able to handle communication between multiple modules??
+     * options:
+     * - use trigger events before and after methods are being called (no route/controllers needed)
+     *   generate handlers for each domain component, during compile
+     * - create a more complex plugin system to manipulate code on compile time. See: https://docs.mosaic.js.org/
      */
     const context: { [key: string]: any } = {}
     const domains: string[] = domainCollector.getNames()
@@ -87,8 +94,6 @@ async function startServer() {
         Object.assign(context, { [name]: currentContext })
     }
 
-    console.log(context)
-
     /**
      * Handling errors
      */
@@ -101,6 +106,7 @@ async function startServer() {
      **/
     app.all("*", async (req, res, next) => {
         const pageContextInit = {
+            // This needs to be more strict (a domain page should only have access to its service/controller, use +data.ts file to retrieve data)
             domainContext: context,
             urlOriginal: req.originalUrl
         }

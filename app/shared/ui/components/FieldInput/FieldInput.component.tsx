@@ -1,7 +1,7 @@
 import { forwardRef, ForwardedRef, InputHTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { mergeDeep } from '../../../utils'
+import { mergeDeep } from '_shared/utils'
 import { themeStore } from '../themeStore'
 
 interface MyInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -34,23 +34,23 @@ const FieldInputComponent = forwardRef<HTMLInputElement, MyInputProps>(({ id, cl
     }
 
     return (
-        <div className={ twMerge(theme.base, className) }>
-            <input { ...inputProps } />
+        <div className={twMerge(theme.base, className)}>
+            <input {...inputProps} />
             <label
                 htmlFor={id}
-                className={ twMerge(
+                className={twMerge(
                     theme.label.base,
                     theme.label.status[status],
                     theme.label.sizes[sizing]
                 )}
             >
-                { label }
+                {label}
             </label>
-            { Icon && <div className={ theme.icon.base }>
-                <Icon className={ twMerge(
+            {Icon && <div className={theme.icon.base}>
+                <Icon className={twMerge(
                     theme.icon.sizes[sizing],
                 )} aria-hidden="true" />
-            </div> }
+            </div>}
         </div>
     )
 })

@@ -3,28 +3,28 @@
 import * as $ from "../reflection";
 import * as _ from "../imports";
 import type * as _std from "./std";
-import type * as _integration from "./integration";
-import type * as _user from "./user";
-export type $UserIntegrationλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
-  "integration": $.LinkDesc<_integration.$BaseIntegration, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "user": $.LinkDesc<_user.$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+import type * as _Integration from "./Integration";
+import type * as _User from "./User";
+export type $RelationλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
+  "integration": $.LinkDesc<_Integration.$Base, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "user": $.LinkDesc<_User.$Base, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
 }>;
-type $UserIntegration = $.ObjectType<"userIntegration::UserIntegration", $UserIntegrationλShape, null, [
+type $Relation = $.ObjectType<"UserIntegration::Relation", $RelationλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
-  {user: {__element__: _user.$User, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },integration: {__element__: _integration.$BaseIntegration, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+  {user: {__element__: _User.$Base, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },integration: {__element__: _Integration.$Base, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $UserIntegration = $.makeType<$UserIntegration>(_.spec, "a07fb5a6-b0bf-11ee-8d1e-c9c3cb3f48e4", _.syntax.literal);
+const $Relation = $.makeType<$Relation>(_.spec, "77c55cd6-b184-11ee-a803-07544716e102", _.syntax.literal);
 
-const UserIntegration: $.$expr_PathNode<$.TypeSet<$UserIntegration, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($UserIntegration, $.Cardinality.Many), null);
+const Relation: $.$expr_PathNode<$.TypeSet<$Relation, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Relation, $.Cardinality.Many), null);
 
 
 
-export { $UserIntegration, UserIntegration };
+export { $Relation, Relation };
 
 type __defaultExports = {
-  "UserIntegration": typeof UserIntegration
+  "Relation": typeof Relation
 };
 const __defaultExports: __defaultExports = {
-  "UserIntegration": UserIntegration
+  "Relation": Relation
 };
 export default __defaultExports;

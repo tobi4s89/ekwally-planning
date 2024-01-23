@@ -1,10 +1,10 @@
 import { ModelType } from '_shared/types'
 
-export default function UserModel(edgeql: any, types: { [key: string]: any }): ModelType {
+export default function UserModel(edgeql: any): ModelType {
     const e = edgeql
     const Identity = e.ext.auth.Identity
-    const User = types.User
-    const Account = types.Account
+    const User = e.User
+    const Account = e.Account
 
     return {
         create: (data: any) => {

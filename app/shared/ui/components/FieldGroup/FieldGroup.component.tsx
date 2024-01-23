@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { mergeDeep } from '../../../utils'
+import { mergeDeep } from '_shared/utils'
 import { themeStore } from '../themeStore'
 
 type MyProps = {
@@ -18,20 +18,20 @@ const FieldGroupComponent = ({ children, className = '', customTheme = {}, flow 
 
     return (
         <Fragment>
-            <fieldset className={ twMerge(theme.base, className) }>
+            <fieldset className={twMerge(theme.base, className)}>
                 <div className="mb-5">
-                    <legend className={ theme.legend.base }>
-                        <div className={ theme.legend.divider } />
-                        <h4 className={ theme.legend.title }>{ title }</h4>
-                        <div className={ theme.legend.divider } />
+                    <legend className={theme.legend.base}>
+                        <div className={theme.legend.divider} />
+                        <h4 className={theme.legend.title}>{title}</h4>
+                        <div className={theme.legend.divider} />
                     </legend>
                 </div>
-                <div className={ twMerge(
+                <div className={twMerge(
                     theme.container.base,
                     theme.container.flow[flow],
                     theme.container.sizes[sizing],
-                ) }>
-                    { children }
+                )}>
+                    {children}
                 </div>
             </fieldset>
         </Fragment>

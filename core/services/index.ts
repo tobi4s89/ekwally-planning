@@ -1,9 +1,6 @@
 import { Application, Router } from 'express'
 import { Client } from 'edgedb'
-import EdgeQL from '../db/edgeql-js'
-import { ExclusiveTuple } from '../db/edgeql-js/typesystem'
-import Types from '../db/edgeql-js/modules/integration'
-import { exclusivesToFilterSingle, SelectFilterExpression } from '../db/edgeql-js/select'
+import EdgeQL from '_generated/edgeql-js'
 
 export interface DomainExportType {
     middleware?: any
@@ -11,13 +8,6 @@ export interface DomainExportType {
     service?: Function
     routes?: Function
 }
-
-export type EdgeQLSelectModifiers = {
-    filter: SelectFilterExpression
-    filter_single: exclusivesToFilterSingle<ExclusiveTuple> | SelectFilterExpression
-}
-
-export type EdgeQLType = typeof EdgeQL & EdgeQLSelectModifiers
 
 export type ContextParamsType = {
     app: Application
@@ -30,8 +20,7 @@ export type ContextParamsType = {
 export type ContextResultType = {
     app: Application
     client: Client
-    edgeql: EdgeQLType,
-    types: typeof Types,
+    edgeql: typeof EdgeQL
     [key: string]: any
 }
 

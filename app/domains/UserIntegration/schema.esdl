@@ -1,9 +1,9 @@
-module userIntegration {
-    type UserIntegration {
-        link user: user::User;
-        link integration: integration::BaseIntegration;
+module UserIntegration {
+    type Relation {
+        link user: User::Base;
+        link integration: Integration::Base;
 
         index on (.user);
         constraint exclusive on ((.user, .integration));
-    }
+    };
 }

@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge'
-import { mergeDeep, genericForwardRef}  from '../../../utils'
+import { mergeDeep, genericForwardRef } from '_shared/utils'
 import { themeStore } from '../themeStore'
 import { ButtonBase } from './Button.base'
 
@@ -47,9 +47,9 @@ const ButtonComponent = genericForwardRef(({ children, className, color = 'defau
     }
 
     return (
-        <ButtonBase { ...currProps }>
-            <span { ...spanProps }>
-                { children }
+        <ButtonBase {...currProps}>
+            <span {...spanProps}>
+                {children}
             </span>
         </ButtonBase>
     )

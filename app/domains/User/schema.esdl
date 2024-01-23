@@ -1,18 +1,18 @@
 using extension auth;
 
-module user {
+module User {
     global currentUser := (
-        select User
+        select Base
         filter .identity ?= global ext::auth::ClientTokenIdentity
     );
 
-    abstract type User {
+    abstract type Base {
         required identity: ext::auth::Identity {
             constraint exclusive;
         };
     };
 
-    type Account extending User {
+    type Account extending Base {
         required first_name: str;
         required last_name: str;
     };

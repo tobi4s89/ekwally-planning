@@ -4,22 +4,16 @@ import { IntegrationTypeMapper } from '../types'
 
 type DataType = { [key: string]: any, type: string, password: BufferSource | string }
 
-export default function IntegrationModel(edgeql: any, types: { [key: string]: any }): ModelType {
+export default function IntegrationModel(edgeql: any): ModelType {
     const e = edgeql
-    const BaseIntegration = types.BaseIntegration
+    const BaseIntegration = e.BaseIntegration
 
     const integrationTypeMapper: IntegrationTypeMapper = {
-        picnic: types.PicnicIntegration,
-        trello: types.TrelloIntegration
+        picnic: e.PicnicIntegration,
+        trello: e.TrelloIntegration
     }
 
     return {
-        /**
-         * Create a new record using the given data.
-         * 
-         * @param data - The data to create the record with.
-         * @returns The newly created record.
-         */
         create: async (data: DataType) => {
             if (!data.type) throw new Error('Missing integration type')
             // Hash the password if it exists
@@ -31,7 +25,7 @@ export default function IntegrationModel(edgeql: any, types: { [key: string]: an
 
                 return e.insert(type, data)
             } catch (error) {
-                throw new Error(`Invalid integration type: ${data.type}, thrownwith Error: ${error}`)
+                throw new Error(`Invalid integration type: ${data.type}, thrown with Error: ${error}`)
             }
         },
 

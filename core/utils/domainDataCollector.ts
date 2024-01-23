@@ -7,18 +7,20 @@ type DomainDirectory = {
     name: string
 }
 
-type DomainHandler = (...args: any[]) => any
+export type DomainHandler = (...args: any[]) => { [key: string]: Function }
 
 export interface DomainHandlers {
     middleware?: DomainHandler
     model?: DomainHandler
     routes?: DomainHandler
     service?: DomainHandler
+    plugin?: DomainHandler
 }
 
 export interface DomainObject {
     name: string
     export: DomainHandlers
+    type: 'module' | 'relation'
 }
 
 export class DomainDataCollector {
@@ -32,6 +34,14 @@ export class DomainDataCollector {
         const source = path.resolve(root, 'app/domains')
         const domainObjects = await DomainDataCollector.getDomainDirectories(source)
         return new this(domainObjects)
+    }
+
+    static getSortedDomainsByType(domains: DomainObject[]): DomainObject[] {
+        return domains.sort((a, b) => {
+            if (a.type === 'module') return -1
+            if (b.type === 'relation') return 1
+            return 0
+        })
     }
 
     static async getValidRegisterData(data: DomainDirectory[]): Promise<DomainObject[]> {
@@ -49,7 +59,7 @@ export class DomainDataCollector {
             }
         }
 
-        return validData
+        return DomainDataCollector.getSortedDomainsByType(validData)
     }
 
     static async getDomainDirectories(source: string): Promise<DomainObject[]> {

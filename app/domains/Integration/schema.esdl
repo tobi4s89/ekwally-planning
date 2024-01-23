@@ -1,5 +1,5 @@
-module integration {
-    abstract type BaseIntegration {
+module Integration {
+    abstract type Base {
         required property name: str;
         required property is_active: bool {
             default := false;
@@ -12,12 +12,12 @@ module integration {
         };
     }
 
-    type TrelloIntegration extending BaseIntegration {
+    type Trello extending Base {
         required property api_key: str;
         required property api_token: str;
     };
 
-    type PicnicIntegration extending BaseIntegration {
+    type Picnic extending Base {
         required property email: str;
         required property password_hash: str;
     };

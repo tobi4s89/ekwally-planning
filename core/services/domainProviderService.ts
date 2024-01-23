@@ -10,35 +10,32 @@ export const lowercaseFirst = (string: string): string => {
     return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
-export const parseEgdeQLObject = (e: any, domain: string, domains: string[]): any => {
-    const availableDomains = domains.map(name => lowercaseFirst(name))
-    const types = {}
-    const strippedEdgeQLObject: any = {}
-
-    for (const key in e) {
-        if (!availableDomains.includes(key)) strippedEdgeQLObject[key] = e[key]
-        if (lowercaseFirst(domain) === key && Reflect.has(e, lowercaseFirst(domain))) {
-            Object.assign(types, Reflect.get(e, lowercaseFirst(domain)))
-        }
-    }
-
-    return { edgeql: strippedEdgeQLObject, types }
-}
-
 export class DomainProviderService {
     current: string
     domainHandlers: DomainHandlers
+    type: string
 
+    /** Determain which domain components can be manipulated */
+    domainPluginHandlers: string[] = [
+        'service',
+        'routes'
+    ]
+
+    /**
+     * Provide specific data for each module component type, converted from string
+     * Todo: Shorten string values to params only: e.g. middleware: ['client', 'app']
+     * */
     provideMapper: { [key: string]: string[] } = {
         middleware: ['domainHandlers.middleware(client, app)'],
-        model: ['domainHandlers.model(edgeql, types)'],
+        model: ['domainHandlers.model(edgeql)'],
         service: ['domainHandlers.service(client, model)'],
-        routes: ['domainHandlers.routes(middleware, service)']
+        routes: ['domainHandlers.routes(middleware, service)'],
     }
 
     constructor(domainObject: DomainObject) {
-        this.current = domainObject.name
         this.domainHandlers = domainObject.export
+        this.current = domainObject.name
+        this.type = domainObject.type
     }
 
     static async provide(
@@ -51,12 +48,8 @@ export class DomainProviderService {
         ).handle(params)
     }
 
-    private handle({ app, client, domains, edgeql: e, router }: ContextParamsType) {
-        const { edgeql, types } = parseEgdeQLObject(e, this.current, domains)
-
-        console.log('------------------------types', types)
-        console.log('------------------------edge', edgeql)
-        const context: ContextResultType = { app, client, edgeql, types }
+    private handle({ app, client, edgeql, router }: ContextParamsType) {
+        const context: ContextResultType = { app, client, edgeql }
         context[this.current] = {}
 
         const castObject = (services: any, arg: string, isKeyValue = false) => {
@@ -65,9 +58,9 @@ export class DomainProviderService {
                 : services[arg]
         }
 
-        for (const type in this.provideMapper) {
-            if (this.domainHandlers[type as keyof DomainHandlers] === undefined) continue
-            const handlerExpression = this.provideMapper[type as keyof typeof this.provideMapper][0]
+        for (const objectType in this.provideMapper) {
+            if (this.domainHandlers[objectType as keyof DomainHandlers] === undefined) continue
+            const handlerExpression = this.provideMapper[objectType as keyof typeof this.provideMapper][0]
 
             // Extract handler name and arguments from the expression
             const [handlerPath, argsString] = handlerExpression.split('(')
@@ -80,8 +73,14 @@ export class DomainProviderService {
                     ? [castObject(context, handlerArgs[0])]
                     : [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
 
-                context[this.current][type] = handler.apply(null, args)
+                context[this.current][objectType] = handler.apply(null, args)
             }
+        }
+
+        if (this.type === 'relation') {
+            /** 
+             * Todo: Provide domain with type relation with related domain data
+             */
         }
 
         return {

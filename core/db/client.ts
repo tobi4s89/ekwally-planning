@@ -1,5 +1,5 @@
 import { createClient } from 'edgedb'
-export { default as edgeql } from './edgeql-js'
+export { default as edgeql } from '_generated/edgeql-js'
 
 export const client = createClient()
 

@@ -1,8 +1,7 @@
-import { EdgeQLType } from '../../../../core/services'
 import { $PicnicIntegration, $TrelloIntegration } from '../../../../core/db/edgeql-js/modules'
 import Types from '../../../../core/db/edgeql-js/modules/integration'
 
-export { $PicnicIntegration, $TrelloIntegration, EdgeQLType }
+export { $PicnicIntegration, $TrelloIntegration }
 
 export declare interface IntegrationTypeMapper {
     [key: string]: $PicnicIntegration | $TrelloIntegration

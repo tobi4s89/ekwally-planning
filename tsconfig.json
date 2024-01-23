@@ -20,11 +20,14 @@
     "types": [
       "vite/client",
       "vike-react",
-      "./types"
+      "./app/shared/types"
     ],
     "jsx": "preserve",
     "jsxImportSource": "react",
     "paths": {
+      "_generated/*": [
+        "./generated/*"
+      ],
       "_shared/*": [
         "./app/shared/*"
       ],

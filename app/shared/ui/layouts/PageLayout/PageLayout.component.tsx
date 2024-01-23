@@ -1,3 +1,10 @@
+/**
+ * Todo: Add sections to Sidebar and Content component, which can include components provided by domains.
+ * options:
+ * - generic and global contentBuilder() and sidebarBuilder() function
+ * - sidebar.ts and content.ts module config file
+ */
+
 import { useState } from 'react'
 import { Header, Sidebar, SidebarDialog, Content } from '../'
 
@@ -10,7 +17,7 @@ type MyProps = {
 export function PageBlank({ children }: any) {
     return (
         <div className="page-layout h-full layout-blank bg-secondary">
-            { children }
+            {children}
         </div>
     )
 }
@@ -23,15 +30,15 @@ export function PageLayoutOneColumn({ children }: any) {
             {/* for mobile */}
             <SidebarDialog
                 isOpen={sidebarOpen}
-                onSidebarOpen={ setSidebarOpen }
+                onSidebarOpen={setSidebarOpen}
             >
                 <Sidebar />
             </SidebarDialog>
 
             <div>
-                <Header onSidebarOpen={ setSidebarOpen } />
+                <Header onSidebarOpen={setSidebarOpen} />
                 <Content>
-                    { children }
+                    {children}
                 </Content>
             </div>
         </div>
@@ -46,20 +53,20 @@ export function PageLayout({ children }: MyProps) {
             {/* for mobile */}
             <SidebarDialog
                 isOpen={sidebarOpen}
-                onSidebarOpen={ setSidebarOpen }
+                onSidebarOpen={setSidebarOpen}
             >
                 <Sidebar />
             </SidebarDialog>
 
             {/* for desktop */}
             <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-                { <Sidebar /> }
+                {<Sidebar />}
             </div>
 
             <div className="lg:pl-72">
-                <Header onSidebarOpen={ setSidebarOpen } />
+                <Header onSidebarOpen={setSidebarOpen} />
                 <Content>
-                    { children }
+                    {children}
                 </Content>
             </div>
         </div>

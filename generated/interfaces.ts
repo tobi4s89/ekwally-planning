@@ -12,56 +12,31 @@ export namespace std {
     export type Base64Alphabet = "standard" | "urlsafe";
   }
 }
-export namespace cfg {
-  export interface ConfigObject extends std.BaseObject {}
-  export interface AbstractConfig extends ConfigObject {
-    "query_work_mem"?: edgedb.ConfigMemory | null;
-    "query_execution_timeout": edgedb.Duration;
-    "session_idle_timeout": edgedb.Duration;
-    "session_idle_transaction_timeout": edgedb.Duration;
-    "listen_port": number;
-    "listen_addresses": string[];
-    "allow_dml_in_functions"?: boolean | null;
-    "allow_bare_ddl"?: AllowBareDDL | null;
-    "apply_access_policies"?: boolean | null;
-    "allow_user_specified_id"?: boolean | null;
-    "shared_buffers"?: edgedb.ConfigMemory | null;
-    "maintenance_work_mem"?: edgedb.ConfigMemory | null;
-    "effective_cache_size"?: edgedb.ConfigMemory | null;
-    "effective_io_concurrency"?: number | null;
-    "default_statistics_target"?: number | null;
-    "force_database_error"?: string | null;
-    "_pg_prepared_statement_cache_size": number;
-    "extensions": ExtensionConfig[];
-    "auth": Auth[];
+export namespace Integration {
+  export interface Base extends std.$Object {
+    "created_at": Date;
+    "is_active": boolean;
+    "modified_at": Date;
+    "name": string;
   }
-  export type AllowBareDDL = "AlwaysAllow" | "NeverAllow";
-  export interface Auth extends ConfigObject {
-    "priority": number;
-    "user": string[];
-    "comment"?: string | null;
-    "method"?: AuthMethod | null;
+  export interface Picnic extends Base {
+    "email": string;
+    "password_hash": string;
   }
-  export interface AuthMethod extends ConfigObject {
-    "transports": ConnectionTransport[];
+  export interface Trello extends Base {
+    "api_key": string;
+    "api_token": string;
   }
-  export interface Config extends AbstractConfig {}
-  export type ConnectionTransport = "TCP" | "TCP_PG" | "HTTP" | "SIMPLE_HTTP";
-  export interface DatabaseConfig extends AbstractConfig {}
-  export interface ExtensionConfig extends ConfigObject {
-    "cfg": AbstractConfig;
+}
+export namespace User {
+  export interface Base extends std.$Object {
+    "identity": ext.auth.Identity;
   }
-  export interface InstanceConfig extends AbstractConfig {}
-  export interface JWT extends AuthMethod {
-    "transports": ConnectionTransport[];
+  export interface Account extends Base {
+    "first_name": string;
+    "last_name": string;
   }
-  export interface Password extends AuthMethod {
-    "transports": ConnectionTransport[];
-  }
-  export interface SCRAM extends AuthMethod {
-    "transports": ConnectionTransport[];
-  }
-  export interface Trust extends AuthMethod {}
+  export interface currentUser extends Base {}
 }
 export namespace ext {
   export namespace auth {
@@ -155,28 +130,69 @@ export namespace ext {
     }
   }
 }
+export namespace UserIntegration {
+  export interface Relation extends std.$Object {
+    "integration"?: Integration.Base | null;
+    "user"?: User.Base | null;
+  }
+}
+export namespace cfg {
+  export interface ConfigObject extends std.BaseObject {}
+  export interface AbstractConfig extends ConfigObject {
+    "query_work_mem"?: edgedb.ConfigMemory | null;
+    "query_execution_timeout": edgedb.Duration;
+    "session_idle_timeout": edgedb.Duration;
+    "session_idle_transaction_timeout": edgedb.Duration;
+    "listen_port": number;
+    "listen_addresses": string[];
+    "allow_dml_in_functions"?: boolean | null;
+    "allow_bare_ddl"?: AllowBareDDL | null;
+    "apply_access_policies"?: boolean | null;
+    "allow_user_specified_id"?: boolean | null;
+    "shared_buffers"?: edgedb.ConfigMemory | null;
+    "maintenance_work_mem"?: edgedb.ConfigMemory | null;
+    "effective_cache_size"?: edgedb.ConfigMemory | null;
+    "effective_io_concurrency"?: number | null;
+    "default_statistics_target"?: number | null;
+    "force_database_error"?: string | null;
+    "_pg_prepared_statement_cache_size": number;
+    "extensions": ExtensionConfig[];
+    "auth": Auth[];
+  }
+  export type AllowBareDDL = "AlwaysAllow" | "NeverAllow";
+  export interface Auth extends ConfigObject {
+    "priority": number;
+    "user": string[];
+    "comment"?: string | null;
+    "method"?: AuthMethod | null;
+  }
+  export interface AuthMethod extends ConfigObject {
+    "transports": ConnectionTransport[];
+  }
+  export interface Config extends AbstractConfig {}
+  export type ConnectionTransport = "TCP" | "TCP_PG" | "HTTP" | "SIMPLE_HTTP";
+  export interface DatabaseConfig extends AbstractConfig {}
+  export interface ExtensionConfig extends ConfigObject {
+    "cfg": AbstractConfig;
+  }
+  export interface InstanceConfig extends AbstractConfig {}
+  export interface JWT extends AuthMethod {
+    "transports": ConnectionTransport[];
+  }
+  export interface Password extends AuthMethod {
+    "transports": ConnectionTransport[];
+  }
+  export interface SCRAM extends AuthMethod {
+    "transports": ConnectionTransport[];
+  }
+  export interface Trust extends AuthMethod {}
+}
 export namespace fts {
   export type ElasticLanguage = "ara" | "bul" | "cat" | "ces" | "ckb" | "dan" | "deu" | "ell" | "eng" | "eus" | "fas" | "fin" | "fra" | "gle" | "glg" | "hin" | "hun" | "hye" | "ind" | "ita" | "lav" | "nld" | "nor" | "por" | "ron" | "rus" | "spa" | "swe" | "tha" | "tur" | "zho" | "edb_Brazilian" | "edb_ChineseJapaneseKorean";
   export type Language = "ara" | "hye" | "eus" | "cat" | "dan" | "nld" | "eng" | "fin" | "fra" | "deu" | "ell" | "hin" | "hun" | "ind" | "gle" | "ita" | "nor" | "por" | "ron" | "rus" | "spa" | "swe" | "tur";
   export type LuceneLanguage = "ara" | "ben" | "bul" | "cat" | "ces" | "ckb" | "dan" | "deu" | "ell" | "eng" | "est" | "eus" | "fas" | "fin" | "fra" | "gle" | "glg" | "hin" | "hun" | "hye" | "ind" | "ita" | "lav" | "lit" | "nld" | "nor" | "por" | "ron" | "rus" | "spa" | "srp" | "swe" | "tha" | "tur" | "edb_Brazilian" | "edb_ChineseJapaneseKorean" | "edb_Indian";
   export type PGLanguage = "xxx_simple" | "ara" | "hye" | "eus" | "cat" | "dan" | "nld" | "eng" | "fin" | "fra" | "deu" | "ell" | "hin" | "hun" | "ind" | "gle" | "ita" | "lit" | "npi" | "nor" | "por" | "ron" | "rus" | "srp" | "spa" | "swe" | "tam" | "tur" | "yid";
   export type Weight = "A" | "B" | "C" | "D";
-}
-export namespace integration {
-  export interface BaseIntegration extends std.$Object {
-    "created_at": Date;
-    "is_active": boolean;
-    "modified_at": Date;
-    "name": string;
-  }
-  export interface PicnicIntegration extends BaseIntegration {
-    "email": string;
-    "password_hash": string;
-  }
-  export interface TrelloIntegration extends BaseIntegration {
-    "api_key": string;
-    "api_token": string;
-  }
 }
 export namespace schema {
   export type AccessKind = "Select" | "UpdateRead" | "UpdateWrite" | "Delete" | "Insert";
@@ -400,22 +416,6 @@ export namespace sys {
   export type TransactionIsolation = "RepeatableRead" | "Serializable";
   export type VersionStage = "dev" | "alpha" | "beta" | "rc" | "final";
 }
-export namespace user {
-  export interface User extends std.$Object {
-    "identity": ext.auth.Identity;
-  }
-  export interface Account extends User {
-    "first_name": string;
-    "last_name": string;
-  }
-  export interface currentUser extends User {}
-}
-export namespace userIntegration {
-  export interface UserIntegration extends std.$Object {
-    "integration"?: integration.BaseIntegration | null;
-    "user"?: user.User | null;
-  }
-}
 export interface types {
   "std": {
     "BaseObject": std.BaseObject;
@@ -426,21 +426,15 @@ export interface types {
       "Base64Alphabet": std.enc.Base64Alphabet;
     };
   };
-  "cfg": {
-    "ConfigObject": cfg.ConfigObject;
-    "AbstractConfig": cfg.AbstractConfig;
-    "AllowBareDDL": cfg.AllowBareDDL;
-    "Auth": cfg.Auth;
-    "AuthMethod": cfg.AuthMethod;
-    "Config": cfg.Config;
-    "ConnectionTransport": cfg.ConnectionTransport;
-    "DatabaseConfig": cfg.DatabaseConfig;
-    "ExtensionConfig": cfg.ExtensionConfig;
-    "InstanceConfig": cfg.InstanceConfig;
-    "JWT": cfg.JWT;
-    "Password": cfg.Password;
-    "SCRAM": cfg.SCRAM;
-    "Trust": cfg.Trust;
+  "Integration": {
+    "Base": Integration.Base;
+    "Picnic": Integration.Picnic;
+    "Trello": Integration.Trello;
+  };
+  "User": {
+    "Base": User.Base;
+    "Account": User.Account;
+    "currentUser": User.currentUser;
   };
   "ext": {
     "auth": {
@@ -467,17 +461,31 @@ export interface types {
       "UIConfig": ext.auth.UIConfig;
     };
   };
+  "UserIntegration": {
+    "Relation": UserIntegration.Relation;
+  };
+  "cfg": {
+    "ConfigObject": cfg.ConfigObject;
+    "AbstractConfig": cfg.AbstractConfig;
+    "AllowBareDDL": cfg.AllowBareDDL;
+    "Auth": cfg.Auth;
+    "AuthMethod": cfg.AuthMethod;
+    "Config": cfg.Config;
+    "ConnectionTransport": cfg.ConnectionTransport;
+    "DatabaseConfig": cfg.DatabaseConfig;
+    "ExtensionConfig": cfg.ExtensionConfig;
+    "InstanceConfig": cfg.InstanceConfig;
+    "JWT": cfg.JWT;
+    "Password": cfg.Password;
+    "SCRAM": cfg.SCRAM;
+    "Trust": cfg.Trust;
+  };
   "fts": {
     "ElasticLanguage": fts.ElasticLanguage;
     "Language": fts.Language;
     "LuceneLanguage": fts.LuceneLanguage;
     "PGLanguage": fts.PGLanguage;
     "Weight": fts.Weight;
-  };
-  "integration": {
-    "BaseIntegration": integration.BaseIntegration;
-    "PicnicIntegration": integration.PicnicIntegration;
-    "TrelloIntegration": integration.TrelloIntegration;
   };
   "schema": {
     "AccessKind": schema.AccessKind;
@@ -546,14 +554,6 @@ export interface types {
     "Role": sys.Role;
     "TransactionIsolation": sys.TransactionIsolation;
     "VersionStage": sys.VersionStage;
-  };
-  "user": {
-    "User": user.User;
-    "Account": user.Account;
-    "currentUser": user.currentUser;
-  };
-  "userIntegration": {
-    "UserIntegration": userIntegration.UserIntegration;
   };
 }
 

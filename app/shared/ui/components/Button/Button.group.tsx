@@ -1,6 +1,6 @@
 import { Children, cloneElement, useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { mergeDeep } from '../../../utils'
+import { mergeDeep } from '_shared/utils'
 import { themeStore } from '../themeStore'
 
 const ButtonGroupComponent = ({ children: baseChildren, className, outline, pill, theme: customTheme = {}, ...props }: any) => {
@@ -20,7 +20,7 @@ const ButtonGroupComponent = ({ children: baseChildren, className, outline, pill
         children: items
     }
     return (
-        <div { ...groupProps } />
+        <div {...groupProps} />
     );
 };
 ButtonGroupComponent.displayName = 'ButtonGroup';
