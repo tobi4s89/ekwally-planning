@@ -1,6 +1,3 @@
-import { redirect } from 'vike/abort'
-import { ResponseType } from '../types'
-
 class HttpClient {
     options: any
 
@@ -19,13 +16,7 @@ class HttpClient {
             throw new Error(await response.text())
         }
 
-        const responseJson: ResponseType = await response.json()
-
-        if (responseJson.redirectUrl) {
-            throw redirect(responseJson.redirectUrl)
-        }
-
-        return responseJson
+        return await response.json()
     }
 
     get = async (path: string) => {

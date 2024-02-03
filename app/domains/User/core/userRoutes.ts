@@ -1,4 +1,5 @@
-import { RouteContextType, RouteType } from '_shared/types'
+import { Request, Response, RouteContextType, RouteType } from '_shared/types'
+import { CustomRequest } from '../types'
 
 export default function UserRoutes(context: RouteContextType): RouteType {
     const { middleware, service: userService } = context
@@ -6,36 +7,37 @@ export default function UserRoutes(context: RouteContextType): RouteType {
         get: {
             '/auth/signout': [
                 middleware.signout,
-                (req: any, res: any) => res.redirect('/account/login'),
+                (req: Request, res: Response) => res.redirect('/account/login'),
             ],
             '/auth/verify': [
                 middleware.emailPassword.verify,
-                (req: any, res: any) => res.redirect('/account')
+                (req: Request, res: Response) => res.redirect('/account')
             ],
         },
         post: {
             '/auth/signup': [
                 middleware.emailPassword.signUp(`${process.env.BASE_URL}/auth/verify`),
-                async (req: any, res: any, next: any) => {
+                async (req: CustomRequest, res: Response, next: any) => {
                     try {
-                        const data = await userService.createAccount({
-                            ...req.body.accountData,
-                            identity_id: req.tokenData?.identity_id || ''
+                        const data = await userService.createUser({
+                            ...req.body?.accountData || {},
+                            identity: req.tokenData?.identity_id || ''
                         })
+
 
                         return res.status(201).json({
                             data,
                             redirectUrl: '/account'
                         })
                     } catch (error) {
-                        res.status(500).end(`Error from the server: ${await res.text()}`)
+                        res.status(500).end(`Error from the server: ${error}`)
                         next(error)
                     }
                 }
             ],
             '/auth/signin': [
                 middleware.emailPassword.signIn,
-                async (req: any, res: any) => {
+                async (req: CustomRequest, res: Response) => {
                     if (!(await req.session?.isSignedIn())) {
                         return res.status(401).json({
                             redirectUrl: '/account/login'

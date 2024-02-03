@@ -23,7 +23,7 @@ export class DomainProviderService {
 
     /**
      * Provide specific data for each module component type, converted from string
-     * Todo: Shorten string values to params only: e.g. middleware: ['client', 'app']
+     * Todo: Shorten string values to context items only: e.g. middleware: ['client', 'app']
      * */
     provideMapper: { [key: string]: string[] } = {
         middleware: ['domainHandlers.middleware(client, app)'],
@@ -52,7 +52,7 @@ export class DomainProviderService {
         const context: ContextResultType = { app, client, edgeql }
         context[this.current] = {}
 
-        const castObject = (services: any, arg: string, isKeyValue = false) => {
+        const castObject = (services: any, arg: string) => {
             return this.provideMapper[arg]
                 ? context[this.current][arg]
                 : services[arg]
@@ -66,12 +66,10 @@ export class DomainProviderService {
             const [handlerPath, argsString] = handlerExpression.split('(')
             const handlerArgs = argsString.replace(')', '').split(',').map(part => part.trim())
             const handlerName = handlerPath.split('.')[1]
-
             const handler = this.domainHandlers[handlerName as keyof DomainHandlers]
+
             if (handler) {
-                const args = handlerArgs.length === 1
-                    ? [castObject(context, handlerArgs[0])]
-                    : [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
+                const args = [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
 
                 context[this.current][objectType] = handler.apply(null, args)
             }

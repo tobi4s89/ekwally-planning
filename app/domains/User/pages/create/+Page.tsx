@@ -1,4 +1,5 @@
 import { PureComponent } from 'react'
+import { redirect } from 'vike/abort'
 import { AccountCreate } from '../../components'
 import { createHttpClient } from '_shared/services'
 
@@ -62,8 +63,9 @@ class AccountCreatePage extends PureComponent<{}, MyState> {
 
         try {
             const request = createHttpClient(window.location.origin)
+            const response = await request.post('/auth/signup', body)
 
-            await request.post('/auth/signup', body)
+            throw redirect(response.redirectUrl)
         } catch (error) {
             console.error('There was an error submitting the form:', error)
         }

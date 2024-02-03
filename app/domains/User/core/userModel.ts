@@ -1,35 +1,45 @@
-import { ModelType } from '_shared/types'
+import { User as UserNamespace, ext } from '_generated/interfaces'
+import { ModelContextType, ModelType } from '_shared/types'
 
-export default function UserModel(edgeql: any): ModelType {
-    const e = edgeql
-    const Identity = e.ext.auth.Identity
-    const User = e.User
-    const Account = e.Account
+export default function UserModel(context: ModelContextType): ModelType {
+    const e = context.edgeql
+    const Identity: ext.auth.Identity = e.ext.auth.Identity
+    const Base = e.User.Base
+    const Account = e.User.Account
 
     return {
-        create: (data: any) => {
+        create: (data: UserNamespace.Account): Promise<UserNamespace.Account> => {
             return e.insert(Account, {
                 first_name: data.first_name,
                 last_name: data.last_name,
                 identity: e.select(Identity, () => ({
-                    filter_single: { id: data.identity_id }
+                    filter_single: { id: data.identity }
                 }))
             })
         },
 
         delete: (id: string) => {
-            return e.delete(User, () => (
+            return e.delete(Base, () => (
                 { filter_single: { id } }
             ))
         },
 
-        findById: (id: any) => e.select(User, () => ({
-            ...User['*'],
+        findById: (id: string): Promise<UserNamespace.Account | null> => e.select(Account, () => ({
+            ...Account['*'],
             filter_single: { id }
         })),
 
-        getAll: () => { },
+        getAll: (): Promise<UserNamespace.Account[]> => {
+            return e.select(Account, () => ({ ...Account['*'] }))
+        },
 
-        update: () => { },
+        update: (data: UserNamespace.Account): Promise<UserNamespace.Account | null> => {
+            return e.params({ id: e.uuid }, (params: { id: string }) => {
+                return e.update(Account, () => ({
+                    filter_single: { id: params.id },
+                    set: data,
+                }))
+            })
+        },
     }
 }

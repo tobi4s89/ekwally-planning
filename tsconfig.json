@@ -34,7 +34,6 @@
     }
   },
   "exclude": [
-    "./core/db/edgeql-js",
     "dist"
   ]
 }
