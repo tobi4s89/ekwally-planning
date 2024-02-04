@@ -4,9 +4,9 @@ const registration = {
     name: 'Integration',
     type: 'module',
     export: {
-        model: Module.IntegrationModel,
-        routes: Module.IntegrationRoutes,
-        service: Module.IntegrationService,
+        dataAccessLayer: Module.IntegrationRepository,
+        routeHandler: Module.IntegrationRoutes,
+        transactionService: Module.IntegrationService,
     }
 }
 

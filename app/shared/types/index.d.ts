@@ -19,10 +19,10 @@ export declare type MethodWrapper = (method: ServiceMethod, instance: any) => Se
 
 export declare type ResponseType = { data: any, redirectUrl?: path }
 export declare type ServiceType = { [method: string]: Function }
-export declare type ServiceContextType = { client: EdgeDB.Client, model: ModelType }
+export declare type ServiceContextType = { client: EdgeDB.Client, dataAccessLayer: RepositoryType }
 export declare type MiddlewareType = ExpressAuth | any
 export declare type MiddlewareContextType = { app: Application, client: Client }
-export declare type ModelType = { create: Function<T>, delete: Function<T>, findById: Function<T>, getAll: Function<T>, update: Function<T> }
-export declare type ModelContextType = { edgeql: EdgeQLJS }
+export declare type RepositoryType = { create: Function<T>, delete: Function<T>, findById: Function<T>, getAll: Function<T>, update: Function<T> }
+export declare type RepositoryContextType = { edgeql: EdgeQLJS }
 export declare type RouteType = { get?: RouteHandlers, post?: RouteHandlers }
-export declare type RouteContextType = { middleware: MiddlewareType, service: ServiceType }
+export declare type RouteContextType = { middleware: MiddlewareType, transactionService: ServiceType }

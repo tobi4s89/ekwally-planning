@@ -2,8 +2,12 @@ import { Request, Response, RouteContextType, RouteType } from '_shared/types'
 import { CustomRequest } from '../types'
 
 export default function UserRoutes(context: RouteContextType): RouteType {
-    const { middleware, service: userService } = context
+    const { middleware, transactionService: userService } = context
     return {
+
+        /**
+         * 
+         */
         get: {
             '/auth/signout': [
                 middleware.signout,
@@ -14,6 +18,10 @@ export default function UserRoutes(context: RouteContextType): RouteType {
                 (req: Request, res: Response) => res.redirect('/account')
             ],
         },
+
+        /**
+         * 
+         */
         post: {
             '/auth/signup': [
                 middleware.emailPassword.signUp(`${process.env.BASE_URL}/auth/verify`),

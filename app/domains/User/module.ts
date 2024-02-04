@@ -5,9 +5,9 @@ const registration = {
     type: 'module',
     export: {
         middleware: Module.AuthMiddleware,
-        model: Module.UserModel,
-        routes: Module.UserRoutes,
-        service: Module.UserService,
+        dataAccessLayer: Module.UserRepository,
+        routeHandler: Module.UserRoutes,
+        transactionService: Module.UserService,
     }
 }
 

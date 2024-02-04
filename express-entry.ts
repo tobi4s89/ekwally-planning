@@ -15,7 +15,9 @@ import connectDatabase, { client, edgeql } from './core/db/client'
 import {
     errorHandlingMiddleware,
     DomainDataCollector,
-    DomainProviderService
+    DomainProviderService,
+    ProxyConfig,
+    ProxyManager,
 } from './core'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -69,30 +71,37 @@ async function startServer() {
     /**
      * Domain registration
      * 
-     * Todo: Make context only (global) available for domains with type relation.
-     * Only relations should be able to handle communication between multiple modules??
-     * options:
-     * - use trigger events before and after methods are being called (no route/controllers needed)
-     *   generate handlers for each domain component, during compile
-     * - create a more complex plugin system to manipulate code on compile time. See: https://docs.mosaic.js.org/
+     * Todo: Move all proxy and domain registration logic to specific service/util
      */
     const context: { [key: string]: any } = {}
-    const domains: string[] = domainCollector.getNames()
+    const contextParams = { app, router, client, edgeql }
+    let proxyConfig = {}
 
     for (const name of domainCollector.getNames()) {
+        const currentProxyConfig = ProxyManager.castProxyConfig(
+            domainCollector.getExportTypeByDomain(name, 'plugin') as ProxyConfig || {}
+        )
+
+        proxyConfig = ProxyManager.mergeProxyConfigs(
+            proxyConfig,
+            currentProxyConfig
+        )
+
         const {
             router: routeMiddleware,
             [name]: currentContext
         }: { [key: string]: any } = await DomainProviderService.provide(
-            name,
-            { app, router, client, domains, edgeql },
-            domainCollector
+            domainCollector.getDomainByName(name),
+            contextParams,
+            proxyConfig
         )
 
         if (routeMiddleware) app.use(routeMiddleware)
 
         Object.assign(context, { [name]: currentContext })
     }
+
+    console.log(context)
 
     /**
      * Handling errors
@@ -106,7 +115,6 @@ async function startServer() {
      **/
     app.all("*", async (req, res, next) => {
         const pageContextInit = {
-            // This needs to be more strict (a domain page should only have access to its service/controller, use +data.ts file to retrieve data)
             domainContext: context,
             urlOriginal: req.originalUrl
         }

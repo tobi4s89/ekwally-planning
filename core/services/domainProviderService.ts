@@ -3,7 +3,8 @@ import type {
     ContextResultType,
 } from './index'
 import { registerDomainRoutes } from '../middleware'
-import { DomainDataCollector, DomainHandlers, DomainObject } from '../utils'
+import { CastedProxyConfig, ProxyManager } from './proxyManager'
+import { DomainExport, DomainObject } from '../utils'
 
 export const lowercaseFirst = (string: string): string => {
     if (typeof string !== 'string') return lowercaseFirst(String(string))
@@ -12,24 +13,17 @@ export const lowercaseFirst = (string: string): string => {
 
 export class DomainProviderService {
     current: string
-    domainHandlers: DomainHandlers
+    domainHandlers: DomainExport
     type: string
-
-    /** Determain which domain components can be manipulated */
-    domainPluginHandlers: string[] = [
-        'service',
-        'routes'
-    ]
 
     /**
      * Provide specific data for each module component type, converted from string
-     * Todo: Shorten string values to context items only: e.g. middleware: ['client', 'app']
      * */
     provideMapper: { [key: string]: string[] } = {
-        middleware: ['domainHandlers.middleware(client, app)'],
-        model: ['domainHandlers.model(edgeql)'],
-        service: ['domainHandlers.service(client, model)'],
-        routes: ['domainHandlers.routes(middleware, service)'],
+        middleware: ['client, app'],
+        dataAccessLayer: ['edgeql'],
+        transactionService: ['client, dataAccessLayer'],
+        routeHandler: ['middleware, transactionService']
     }
 
     constructor(domainObject: DomainObject) {
@@ -39,16 +33,17 @@ export class DomainProviderService {
     }
 
     static async provide(
-        name: string,
+        domainObject: DomainObject,
         params: ContextParamsType,
-        domainCollector: DomainDataCollector
+        proxyConfig: CastedProxyConfig
     ) {
-        return new this(
-            domainCollector.getExportByDomain(name)
-        ).handle(params)
+        return new this(domainObject).handle(params, proxyConfig)
     }
 
-    private handle({ app, client, edgeql, router }: ContextParamsType) {
+    private handle(
+        { app, client, edgeql, router }: ContextParamsType,
+        proxyConfig: CastedProxyConfig
+    ) {
         const context: ContextResultType = { app, client, edgeql }
         context[this.current] = {}
 
@@ -59,32 +54,27 @@ export class DomainProviderService {
         }
 
         for (const objectType in this.provideMapper) {
-            if (this.domainHandlers[objectType as keyof DomainHandlers] === undefined) continue
+            if (this.domainHandlers[objectType as keyof DomainExport] === undefined) continue
             const handlerExpression = this.provideMapper[objectType as keyof typeof this.provideMapper][0]
 
-            // Extract handler name and arguments from the expression
-            const [handlerPath, argsString] = handlerExpression.split('(')
-            const handlerArgs = argsString.replace(')', '').split(',').map(part => part.trim())
-            const handlerName = handlerPath.split('.')[1]
-            const handler = this.domainHandlers[handlerName as keyof DomainHandlers]
+            // Extract arguments from the expression
+            const handlerArgs = handlerExpression.split(',').map(part => part.trim())
+            const handler = this.domainHandlers[objectType as keyof DomainExport]
 
-            if (handler) {
+            if (typeof handler === 'function') {
                 const args = [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
+                const domainMethods = handler.apply(null, args)
 
-                context[this.current][objectType] = handler.apply(null, args)
+                context[this.current][objectType] = ProxyManager.applyProxyBehaviorToDomainComponent(
+                    this.current, objectType, domainMethods, proxyConfig
+                )
             }
-        }
-
-        if (this.type === 'relation') {
-            /** 
-             * Todo: Provide domain with type relation with related domain data
-             */
         }
 
         return {
             [this.current]: context[this.current],
-            ...(context[this.current].routes
-                ? { router: registerDomainRoutes.execute(router, context[this.current].routes) }
+            ...(context[this.current].routeHandler
+                ? { router: registerDomainRoutes.execute(router, context[this.current].routeHandler) }
                 : {})
         }
     }

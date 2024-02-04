@@ -1,27 +1,13 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { root } from '../../express-entry'
-
-type DomainDirectory = {
-    dir: string
-    name: string
-}
-
-export type DomainHandler = (...args: any[]) => { [key: string]: Function }
-
-export interface DomainHandlers {
-    middleware?: DomainHandler
-    model?: DomainHandler
-    routes?: DomainHandler
-    service?: DomainHandler
-    plugin?: DomainHandler
-}
-
-export interface DomainObject {
-    name: string
-    export: DomainHandlers
-    type: 'module' | 'relation'
-}
+import {
+    DomainExport,
+    DomainHandler,
+    DomainProxyConfig,
+    DomainDirectory,
+    DomainObject
+} from './index'
 
 export class DomainDataCollector {
     domains: DomainObject[]
@@ -38,8 +24,8 @@ export class DomainDataCollector {
 
     static getSortedDomainsByType(domains: DomainObject[]): DomainObject[] {
         return domains.sort((a, b) => {
-            if (a.type === 'module') return -1
-            if (b.type === 'relation') return 1
+            if (a.type === 'relation') return -1
+            if (b.type === 'module') return 1
             return 0
         })
     }
@@ -84,13 +70,13 @@ export class DomainDataCollector {
         return this.domains.map(domain => domain.name)
     }
 
-    public getExportByDomain(name: string): DomainObject {
+    public getDomainByName(name: string): DomainObject {
         this._ensureExists(name)
         return this.domains.find(domain => domain.name === name) as DomainObject
     }
 
-    public getExportTypeByDomain(name: string, type: keyof DomainHandlers): DomainHandler {
-        const domain = this.getExportByDomain(name)
+    public getExportTypeByDomain(name: string, type: keyof DomainExport): DomainHandler | DomainProxyConfig {
+        const domain = this.getDomainByName(name)
         return domain.export[type] as DomainHandler
     }
 }

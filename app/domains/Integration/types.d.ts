@@ -13,3 +13,5 @@ export type CreateIntegrationDataType = {
     password_hash?: Uint8Array
     type?: keyof IntegrationTypeMapper
 }
+
+export type IntegrationTypeMapperValueOf<T> = T[keyof T]

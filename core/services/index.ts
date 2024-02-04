@@ -2,17 +2,17 @@ import { Application, Router } from 'express'
 import { Client } from 'edgedb'
 import EdgeQL from '_generated/edgeql-js'
 
-export interface DomainExportType {
+export interface DomainExport {
     middleware?: any
-    model?: Function
-    service?: Function
-    routes?: Function
+    dataAccessLayer?: Function
+    transactionService?: Function
+    routeHandler?: Function
+    plugin?: Function
 }
 
 export type ContextParamsType = {
     app: Application
     client: Client
-    domains: string[]
     edgeql: typeof EdgeQL
     router: Router
 }
@@ -25,3 +25,5 @@ export type ContextResultType = {
 }
 
 export * from './domainProviderService'
+export * from './domainProxyFactory'
+export * from './proxyManager'

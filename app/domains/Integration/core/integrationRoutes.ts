@@ -2,6 +2,10 @@ import { NextFunction, Request, Response, RouteContextType, RouteType } from '_s
 
 export default function IntegrationRoutes(context: RouteContextType): RouteType {
     return {
+
+        /**
+         * 
+         */
         post: {
             '/integration/create': [
                 async (req: Request, res: Response, next: NextFunction) => {

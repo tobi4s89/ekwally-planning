@@ -1,4 +1,4 @@
-import * as Plugin from './plugins'
+import { default as Plugin } from './plugins'
 
 /** Todo: By default the domain data collector utility should convert the name to the related domains.
  * Use export.domains = ['User', 'Integration'] when using a different non-related domain name.
@@ -9,7 +9,6 @@ const registration = {
     name: 'UserIntegration',
     type: 'relation',
     export: {
-        domains: [],
         plugin: Plugin
     }
 }

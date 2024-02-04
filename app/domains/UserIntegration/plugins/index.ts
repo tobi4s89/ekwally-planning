@@ -1,21 +1,27 @@
-const getCurrentUserId = () => {
-    // Todo: get current user id
+/**
+ * Todo: make sure that the provided context fits the needs of this relation module
+ */
+
+const createUserIntegration = async (args, callback) => {
+    // Logic after Integration.service.createIntegration is called
+    // E.g., create a UserIntegration record. Remember to create UserIntegration services that can handle it.
+    // These services should be provided in the context object??
 }
 
-/**
- * Todo: Use generated event handlers to interact with related domain handlers
- * where 'originalMethod' is just an alias for the service createIntegration() method
- */
-export const Integration = {
-    'service.createIntegration': async (args: any[], originalMethod: Function) => {
-        // created integration data, acts as an 'after' hook event
-        const integrationData = await originalMethod(args)
-        const userId = getCurrentUserId()
+const checkForTesting = async (args: any, result: any) => {
+    const promiseResult = await result
+    console.log(args, promiseResult)
+}
 
-        // Todo: save UserIntegration
-        // persistUserIntegration({ integration: integrationData.id, user: userId })
-
-        // Don't break the flow
-        return integrationData
+const proxyConfig = {
+    /** Todo: simplify logic by doing: */
+    'Integration.transactionService': {
+        createIntegration: createUserIntegration
+    },
+    /** Currently working - instead of: */
+    'User.transactionService.createUser': {
+        after: checkForTesting
     }
 }
+
+export default proxyConfig
