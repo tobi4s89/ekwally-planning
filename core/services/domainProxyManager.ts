@@ -1,12 +1,9 @@
-export type ProxyBehavior = (methodName: string, args: any[]) => void
 export type ProxyConfigFunction = (...args: any[]) => any
 export type ProxyConfigEntry = { [key: string]: ProxyConfigFunction | ProxyConfigFunction[] }
 export type ProxyConfig = { [domainMethod: string]: ProxyConfigEntry }
 export type CastedProxyConfig = { [domain: string]: { [type: string]: { [originalMethod: string]: ProxyConfigEntry } } }
 
-class ProxyManager {
-    private static behaviors = new Map<string, Map<string, ProxyBehavior>>();
-
+class DomainProxyManager {
     static castProxyConfig(config: ProxyConfig): CastedProxyConfig {
         const castedConfig: CastedProxyConfig = {}
 
@@ -49,7 +46,7 @@ class ProxyManager {
         return mergedConfig;
     }
 
-    static applyProxyBehaviorToDomainComponent(
+    static applyProxyToComponent(
         domain: string,
         componentType: string,
         componentMethods: any,
@@ -93,4 +90,4 @@ class ProxyManager {
     }
 }
 
-export { ProxyManager };
+export { DomainProxyManager };

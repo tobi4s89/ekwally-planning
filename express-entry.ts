@@ -14,10 +14,10 @@ import 'isomorphic-unfetch'
 import connectDatabase, { client, edgeql } from './core/db/client'
 import {
     errorHandlingMiddleware,
+    DomainContextProvider,
     DomainDataCollector,
-    DomainProviderService,
+    DomainProxyManager,
     ProxyConfig,
-    ProxyManager,
 } from './core'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -78,11 +78,11 @@ async function startServer() {
     let proxyConfig = {}
 
     for (const name of domainCollector.getNames()) {
-        const currentProxyConfig = ProxyManager.castProxyConfig(
+        const currentProxyConfig = DomainProxyManager.castProxyConfig(
             domainCollector.getExportTypeByDomain(name, 'plugin') as ProxyConfig || {}
         )
 
-        proxyConfig = ProxyManager.mergeProxyConfigs(
+        proxyConfig = DomainProxyManager.mergeProxyConfigs(
             proxyConfig,
             currentProxyConfig
         )
@@ -90,7 +90,7 @@ async function startServer() {
         const {
             router: routeMiddleware,
             [name]: currentContext
-        }: { [key: string]: any } = await DomainProviderService.provide(
+        }: { [key: string]: any } = await DomainContextProvider.provide(
             domainCollector.getDomainByName(name),
             contextParams,
             proxyConfig

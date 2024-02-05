@@ -10,7 +10,7 @@ export default function IntegrationRoutes(context: RouteContextType): RouteType 
             '/integration/create': [
                 async (req: Request, res: Response, next: NextFunction) => {
                     try {
-                        const data = await context.service.createIntegration(req.body)
+                        const data = await context.transactionService.createIntegration(req.body)
 
                         return res.status(201).json({ data })
                     } catch (error) {

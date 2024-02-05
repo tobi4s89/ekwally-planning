@@ -1,17 +1,18 @@
 import type {
     ContextParamsType,
     ContextResultType,
+    DomainExport,
+    DomainObject,
 } from './index'
 import { registerDomainRoutes } from '../middleware'
-import { CastedProxyConfig, ProxyManager } from './proxyManager'
-import { DomainExport, DomainObject } from '../utils'
+import { CastedProxyConfig, DomainProxyManager } from './domainProxyManager'
 
 export const lowercaseFirst = (string: string): string => {
     if (typeof string !== 'string') return lowercaseFirst(String(string))
     return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
-export class DomainProviderService {
+export class DomainContextProvider {
     current: string
     domainHandlers: DomainExport
     type: string
@@ -65,7 +66,7 @@ export class DomainProviderService {
                 const args = [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
                 const domainMethods = handler.apply(null, args)
 
-                context[this.current][objectType] = ProxyManager.applyProxyBehaviorToDomainComponent(
+                context[this.current][objectType] = DomainProxyManager.applyProxyToComponent(
                     this.current, objectType, domainMethods, proxyConfig
                 )
             }
