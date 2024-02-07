@@ -19,40 +19,40 @@ const $Base = $.makeType<$Base>(_.spec, "77b9c9fc-b184-11ee-896f-d9b4ca7f0854", 
 
 const Base: $.$expr_PathNode<$.TypeSet<$Base, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Base, $.Cardinality.Many), null);
 
-export type $PicnicλShape = $.typeutil.flatten<$BaseλShape & {
+export type $ApiλShape = $.typeutil.flatten<$BaseλShape & {
+  "api_token": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "api_key": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+}>;
+type $Api = $.ObjectType<"Integration::Api", $ApiλShape, null, [
+  ...$Base['__exclusives__'],
+]>;
+const $Api = $.makeType<$Api>(_.spec, "77bc77e2-b184-11ee-bd83-1bceae6c7709", _.syntax.literal);
+
+const Api: $.$expr_PathNode<$.TypeSet<$Api, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Api, $.Cardinality.Many), null);
+
+export type $EmailPasswordλShape = $.typeutil.flatten<$BaseλShape & {
   "email": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
   "password_hash": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
 }>;
-type $Picnic = $.ObjectType<"Integration::Picnic", $PicnicλShape, null, [
+type $EmailPassword = $.ObjectType<"Integration::EmailPassword", $EmailPasswordλShape, null, [
   ...$Base['__exclusives__'],
 ]>;
-const $Picnic = $.makeType<$Picnic>(_.spec, "77bb3094-b184-11ee-bdc2-e5d04fddc872", _.syntax.literal);
+const $EmailPassword = $.makeType<$EmailPassword>(_.spec, "77bb3094-b184-11ee-bdc2-e5d04fddc872", _.syntax.literal);
 
-const Picnic: $.$expr_PathNode<$.TypeSet<$Picnic, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Picnic, $.Cardinality.Many), null);
-
-export type $TrelloλShape = $.typeutil.flatten<$BaseλShape & {
-  "api_key": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "api_token": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-}>;
-type $Trello = $.ObjectType<"Integration::Trello", $TrelloλShape, null, [
-  ...$Base['__exclusives__'],
-]>;
-const $Trello = $.makeType<$Trello>(_.spec, "77bc77e2-b184-11ee-bd83-1bceae6c7709", _.syntax.literal);
-
-const Trello: $.$expr_PathNode<$.TypeSet<$Trello, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Trello, $.Cardinality.Many), null);
+const EmailPassword: $.$expr_PathNode<$.TypeSet<$EmailPassword, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($EmailPassword, $.Cardinality.Many), null);
 
 
 
-export { $Base, Base, $Picnic, Picnic, $Trello, Trello };
+export { $Base, Base, $Api, Api, $EmailPassword, EmailPassword };
 
 type __defaultExports = {
   "Base": typeof Base;
-  "Picnic": typeof Picnic;
-  "Trello": typeof Trello
+  "Api": typeof Api;
+  "EmailPassword": typeof EmailPassword
 };
 const __defaultExports: __defaultExports = {
   "Base": Base,
-  "Picnic": Picnic,
-  "Trello": Trello
+  "Api": Api,
+  "EmailPassword": EmailPassword
 };
 export default __defaultExports;

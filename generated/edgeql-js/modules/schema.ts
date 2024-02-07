@@ -721,8 +721,8 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is User::Base]": $.LinkDesc<_User.$Base, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is User::currentUser]": $.LinkDesc<_User.$currentUser, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Integration::Base]": $.LinkDesc<_Integration.$Base, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<__type__[is Integration::Picnic]": $.LinkDesc<_Integration.$Picnic, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<__type__[is Integration::Trello]": $.LinkDesc<_Integration.$Trello, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is Integration::EmailPassword]": $.LinkDesc<_Integration.$EmailPassword, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is Integration::Api]": $.LinkDesc<_Integration.$Api, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is UserIntegration::Relation]": $.LinkDesc<_UserIntegration.$Relation, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is User::Account]": $.LinkDesc<_User.$Account, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

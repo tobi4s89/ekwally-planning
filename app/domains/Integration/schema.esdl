@@ -12,12 +12,12 @@ module Integration {
         };
     }
 
-    type Trello extending Base {
+    type Api extending Base {
         required property api_key: str;
         required property api_token: str;
     };
 
-    type Picnic extending Base {
+    type EmailPassword extending Base {
         required property email: str;
         required property password_hash: str;
     };

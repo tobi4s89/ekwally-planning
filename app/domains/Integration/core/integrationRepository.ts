@@ -6,8 +6,8 @@ export default function IntegrationRepository(context: RepositoryContextType): R
     const e = context.edgeql
     const Base = e.Integration.Base
     const integrationTypeMapper: IntegrationTypeMapper = {
-        picnic: e.Integration.Picnic,
-        trello: e.Integration.Trello
+        api: e.Integration.Api,
+        emailPassword: e.Integration.EmailPassword,
     }
     const dynamicFieldsForType = (integration: IntegrationTypeMapperValueOf<IntegrationTypeMapper>) => {
         const anyIntegration = integration as any

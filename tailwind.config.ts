@@ -6,7 +6,6 @@ import type { Config } from 'tailwindcss'
 
 import { adjustColors, fontVariants } from './app/shared/utils'
 
-
 const COLOR_PRIMARY = '#e37777'
 const COLOR_SECONDARY = '#f2f2f2'
 

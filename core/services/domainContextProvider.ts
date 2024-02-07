@@ -1,3 +1,4 @@
+import { DomainComponentService } from '_shared/services'
 import type {
     ContextParamsType,
     ContextResultType,
@@ -24,7 +25,8 @@ export class DomainContextProvider {
         middleware: ['client, app'],
         dataAccessLayer: ['edgeql'],
         transactionService: ['client, dataAccessLayer'],
-        routeHandler: ['middleware, transactionService']
+        routeHandler: ['middleware, transactionService'],
+        plugin: ['dataAccessLayer', 'transactionService']
     }
 
     constructor(domainObject: DomainObject) {
@@ -35,15 +37,13 @@ export class DomainContextProvider {
 
     static async provide(
         domainObject: DomainObject,
-        params: ContextParamsType,
-        proxyConfig: CastedProxyConfig
+        params: ContextParamsType
     ) {
-        return new this(domainObject).handle(params, proxyConfig)
+        return new this(domainObject).handle(params)
     }
 
     private handle(
-        { app, client, edgeql, router }: ContextParamsType,
-        proxyConfig: CastedProxyConfig
+        { app, client, edgeql, router, proxies: CastedProxyConfig }: ContextParamsType
     ) {
         const context: ContextResultType = { app, client, edgeql }
         context[this.current] = {}
@@ -60,9 +60,9 @@ export class DomainContextProvider {
 
             // Extract arguments from the expression
             const handlerArgs = handlerExpression.split(',').map(part => part.trim())
-            const handler = this.domainHandlers[objectType as keyof DomainExport]
+            const ClassComponent = this.domainHandlers[objectType as keyof DomainExport]
 
-            if (typeof handler === 'function') {
+            if (typeof ClassComponent === 'function') {
                 const args = [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
                 const domainMethods = handler.apply(null, args)
 

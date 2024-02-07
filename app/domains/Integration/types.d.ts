@@ -1,8 +1,8 @@
 import { Integration as IntegrationNamespace } from '_generated/interfaces'
 
 export interface IntegrationTypeMapper {
-    picnic: IntegrationNamespace.Picnic
-    trello: IntegrationNamespace.Trello
+    api: IntegrationNamespace.Api
+    emailPassword: IntegrationNamespace.EmailPassword
 }
 
 export type CreateIntegrationDataType = {

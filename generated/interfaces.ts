@@ -19,13 +19,13 @@ export namespace Integration {
     "modified_at": Date;
     "name": string;
   }
-  export interface Picnic extends Base {
+  export interface Api extends Base {
+    "api_token": string;
+    "api_key": string;
+  }
+  export interface EmailPassword extends Base {
     "email": string;
     "password_hash": string;
-  }
-  export interface Trello extends Base {
-    "api_key": string;
-    "api_token": string;
   }
 }
 export namespace User {
@@ -428,8 +428,8 @@ export interface types {
   };
   "Integration": {
     "Base": Integration.Base;
-    "Picnic": Integration.Picnic;
-    "Trello": Integration.Trello;
+    "Api": Integration.Api;
+    "EmailPassword": Integration.EmailPassword;
   };
   "User": {
     "Base": User.Base;

@@ -9,6 +9,10 @@ export type DomainDirectory = {
 
 export type DomainHandler = (...args: any[]) => { [key: string]: Function }
 export type DomainProxyConfig = { [key: string]: { [key: string]: Function } }
+export type ProxyConfigFunction = (...args: any[]) => any
+export type ProxyConfigEntry = ProxyConfigFunction | ProxyConfigFunction[]
+export type ProxyConfig = { [domainMethod: string]: ProxyConfigEntry }
+export type CastedProxyConfig = { [domain: string]: { [type: string]: { [key: string]: ProxyConfigEntry } } }
 
 export interface DomainExport {
     middleware?: DomainHandler
@@ -29,6 +33,7 @@ export type ContextParamsType = {
     client: Client
     edgeql: typeof EdgeQL
     router: Router
+    proxies: CastedProxyConfig
 }
 
 export type ContextResultType = {

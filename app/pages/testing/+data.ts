@@ -8,7 +8,7 @@ export default function data(pageContext: any) {
             is_active: true,
             name: 'Picnic integration',
             email: 'tvanegten@hotmail.com',
-            password: 'tobbrzb'
+            password: 'blabla'
         })
 
         return response

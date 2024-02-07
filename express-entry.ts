@@ -73,17 +73,17 @@ async function startServer() {
      * 
      * Todo: Move all proxy and domain registration logic to specific service/util
      */
+    let proxies = {}
     const context: { [key: string]: any } = {}
-    const contextParams = { app, router, client, edgeql }
-    let proxyConfig = {}
+    const contextParams = { app, router, client, edgeql, proxies }
 
     for (const name of domainCollector.getNames()) {
         const currentProxyConfig = DomainProxyManager.castProxyConfig(
             domainCollector.getExportTypeByDomain(name, 'plugin') as ProxyConfig || {}
         )
 
-        proxyConfig = DomainProxyManager.mergeProxyConfigs(
-            proxyConfig,
+        proxies = DomainProxyManager.mergeProxyConfigs(
+            proxies,
             currentProxyConfig
         )
 
@@ -93,7 +93,6 @@ async function startServer() {
         }: { [key: string]: any } = await DomainContextProvider.provide(
             domainCollector.getDomainByName(name),
             contextParams,
-            proxyConfig
         )
 
         if (routeMiddleware) app.use(routeMiddleware)
