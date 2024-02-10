@@ -16,8 +16,6 @@ import {
     errorHandlingMiddleware,
     DomainContextProvider,
     DomainDataCollector,
-    DomainProxyManager,
-    ProxyConfig,
 } from './core'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -74,33 +72,24 @@ async function startServer() {
      * Todo: Move all proxy and domain registration logic to specific service/util
      */
     let proxies = {}
-    const context: { [key: string]: any } = {}
+    const domainContext: { [key: string]: any } = {}
     const contextParams = { app, router, client, edgeql, proxies }
 
     for (const name of domainCollector.getNames()) {
-        const currentProxyConfig = DomainProxyManager.castProxyConfig(
-            domainCollector.getExportTypeByDomain(name, 'plugin') as ProxyConfig || {}
-        )
-
-        proxies = DomainProxyManager.mergeProxyConfigs(
-            proxies,
-            currentProxyConfig
-        )
-
         const {
             router: routeMiddleware,
             [name]: currentContext
         }: { [key: string]: any } = await DomainContextProvider.provide(
             domainCollector.getDomainByName(name),
             contextParams,
+            domainContext
         )
 
         if (routeMiddleware) app.use(routeMiddleware)
 
-        Object.assign(context, { [name]: currentContext })
+        Object.assign(domainContext, { [name]: currentContext })
+        console.log('--------------CURRENTCONTEXT-----', { [name]: currentContext })
     }
-
-    console.log(context)
 
     /**
      * Handling errors
@@ -114,7 +103,7 @@ async function startServer() {
      **/
     app.all("*", async (req, res, next) => {
         const pageContextInit = {
-            domainContext: context,
+            domainContext,
             urlOriginal: req.originalUrl
         }
         const pageContext = await renderPage(pageContextInit)

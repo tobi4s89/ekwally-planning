@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 import { redirect } from 'vike/abort'
 import { AccountCreate } from '../../components'
-import { createHttpClient } from '_shared/services'
+import { HttpClient } from '_shared/services/api'
 
 type MyState = {
     formData: any,
@@ -62,10 +62,10 @@ class AccountCreatePage extends PureComponent<{}, MyState> {
         }
 
         try {
-            const request = createHttpClient(window.location.origin)
-            const response = await request.post('/auth/signup', body)
+            const http = new HttpClient(window.location.origin)
+            const response = await http.post('/auth/signup', body)
 
-            throw redirect(response.redirectUrl)
+            window.location.href = response.redirectUrl
         } catch (error) {
             console.error('There was an error submitting the form:', error)
         }
@@ -88,4 +88,6 @@ class AccountCreatePage extends PureComponent<{}, MyState> {
     }
 }
 
-export default AccountCreatePage
+export default function Page() {
+    return <AccountCreatePage />
+}

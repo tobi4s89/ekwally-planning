@@ -3,7 +3,7 @@ import type {
     ProxyConfigEntry,
     ProxyConfig,
     CastedProxyConfig
-} from './index'
+} from '../types'
 
 class DomainProxyManager {
     static castProxyConfig(config: ProxyConfig): CastedProxyConfig {
@@ -23,9 +23,7 @@ class DomainProxyManager {
         return castedConfig
     }
 
-    static mergeProxyConfigs(globalConfig: CastedProxyConfig, newConfig: CastedProxyConfig): CastedProxyConfig {
-        const mergedConfig = { ...globalConfig }
-
+    static mergeProxyConfigs(mergedConfig: CastedProxyConfig, newConfig: CastedProxyConfig): CastedProxyConfig {
         for (const [domain, types] of Object.entries(newConfig)) {
             mergedConfig[domain] = mergedConfig[domain] || {}
 
@@ -55,7 +53,8 @@ class DomainProxyManager {
         domain: string,
         componentType: string,
         componentMethods: any,
-        proxyConfig: CastedProxyConfig
+        proxyConfig: CastedProxyConfig,
+        globalContext: any
     ): any {
         const domainConfig = proxyConfig[domain]
         if (!domainConfig) return componentMethods
@@ -78,7 +77,7 @@ class DomainProxyManager {
                         return new Proxy(currentMethod, {
                             async apply(target, thisArg, argumentsList) {
                                 const callback = async (...args: any) => Reflect.apply(target, thisArg, args);
-                                const result = await plugin(argumentsList, callback, { 'vla': 'bloe' });
+                                const result = await plugin(argumentsList, callback, globalContext);
 
                                 return result;
                             }

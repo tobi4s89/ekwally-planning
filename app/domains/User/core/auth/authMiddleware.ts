@@ -1,14 +1,14 @@
 import createExpressAuth, { ExpressAuth } from '@edgedb/auth-express'
-import { MiddlewareContextType } from '_shared/types'
+import { DomainMiddleware } from '_shared/services/domains'
 
-export default function AuthMiddleware(context: MiddlewareContextType): ExpressAuth {
-  const { app, client } = context
+export default class AuthMiddleware extends DomainMiddleware {
+  private auth?: ExpressAuth;
 
-  const auth = createExpressAuth(client, {
-    baseUrl: process.env.BASE_URL || 'https://localhost',
-  })
+  async afterInit() {
+    this.auth = createExpressAuth(this.client, {
+      baseUrl: process.env.BASE_URL || 'https://localhost',
+    });
 
-  app.use(auth.createSessionMiddleware())
-
-  return auth
+    this.appInstance.use(await this.auth.createSessionMiddleware())
+  }
 }

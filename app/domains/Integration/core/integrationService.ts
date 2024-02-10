@@ -1,23 +1,17 @@
-import { EdgeDB, ServiceContextType, ServiceType } from '_shared/types'
+import { DomainTransactionService } from '_shared/services/domains'
+import { EdgeDB } from '_shared/types'
 import { promiseHandler } from '_shared/utils'
-
 import { CreateIntegrationDataType } from '../types'
 
-export default function IntegrationService(context: ServiceContextType): ServiceType {
-    const { dataAccessLayer: integrationRepository, client } = context
+export default class IntegrationService extends DomainTransactionService {
 
-    return {
-
-        /**
-         * @param {CreateIntegrationDataType} data
-         * @return {Promise}
-         */
-        createIntegration: (data: CreateIntegrationDataType) => promiseHandler.execute(data, async () => {
-            return await client.transaction(async (tx: EdgeDB.Client) => {
-                const query = integrationRepository.create(data)
+    public createIntegration(data: CreateIntegrationDataType) {
+        return promiseHandler.execute(data, async () => {
+            return await this.client.transaction(async (tx: EdgeDB.Client) => {
+                const query = await this.repository.create(data)
 
                 return await query.run(tx)
             })
-        }),
+        })
     }
 }

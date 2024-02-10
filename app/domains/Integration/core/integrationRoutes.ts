@@ -1,23 +1,22 @@
-import { NextFunction, Request, Response, RouteContextType, RouteType } from '_shared/types'
+import { NextFunction, Request, Response } from '_shared/types'
+import { DomainRoute } from '_shared/services/domains'
 
-export default function IntegrationRoutes(context: RouteContextType): RouteType {
-    return {
+export default class IntegrationRoutes extends DomainRoute {
 
-        /**
-         * 
-         */
-        post: {
-            '/integration/create': [
-                async (req: Request, res: Response, next: NextFunction) => {
-                    try {
-                        const data = await context.transactionService.createIntegration(req.body)
+    /**
+     * 
+     */
+    post = {
+        '/integration/create': [
+            async (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    const data = await this.transactionService.createIntegration(req.body)
 
-                        return res.status(201).json({ data })
-                    } catch (error) {
-                        next(error)
-                    }
+                    return res.status(201).json({ data })
+                } catch (error) {
+                    next(error)
                 }
-            ]
-        },
+            }
+        ]
     }
 }

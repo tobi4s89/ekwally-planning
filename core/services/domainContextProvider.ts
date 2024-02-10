@@ -1,12 +1,13 @@
-import { DomainComponentService } from '_shared/services'
 import type {
     ContextParamsType,
     ContextResultType,
+    DomainComponentInterface,
     DomainExport,
     DomainObject,
-} from './index'
+} from '../types'
 import { registerDomainRoutes } from '../middleware'
-import { CastedProxyConfig, DomainProxyManager } from './domainProxyManager'
+import { DomainProxyManager } from './domainProxyManager'
+import { classToObject } from '../utils/classToObject'
 
 export const lowercaseFirst = (string: string): string => {
     if (typeof string !== 'string') return lowercaseFirst(String(string))
@@ -14,68 +15,73 @@ export const lowercaseFirst = (string: string): string => {
 }
 
 export class DomainContextProvider {
-    current: string
-    domainHandlers: DomainExport
-    type: string
+    globalContext: any
+    context: ContextResultType
+    current: DomainObject
 
     /**
      * Provide specific data for each module component type, converted from string
      * */
     provideMapper: { [key: string]: string[] } = {
-        middleware: ['client, app'],
+        middleware: ['client', 'app'],
         dataAccessLayer: ['edgeql'],
-        transactionService: ['client, dataAccessLayer'],
-        routeHandler: ['middleware, transactionService'],
-        plugin: ['dataAccessLayer', 'transactionService']
+        transactionService: ['client', 'dataAccessLayer'],
+        routeHandler: ['middleware', 'transactionService'],
+        plugin: ['transactionService']
     }
 
-    constructor(domainObject: DomainObject) {
-        this.domainHandlers = domainObject.export
-        this.current = domainObject.name
-        this.type = domainObject.type
+    constructor(domainObject: DomainObject, globalContext: any) {
+        this.context = {}
+        this.current = domainObject
+        this.globalContext = globalContext
     }
 
     static async provide(
         domainObject: DomainObject,
-        params: ContextParamsType
+        params: ContextParamsType,
+        globalContext: any
     ) {
-        return new this(domainObject).handle(params)
+        return new this(domainObject, globalContext).handle(params)
     }
 
     private handle(
-        { app, client, edgeql, router, proxies: CastedProxyConfig }: ContextParamsType
+        { app, client, edgeql, router, proxies }: ContextParamsType
     ) {
-        const context: ContextResultType = { app, client, edgeql }
-        context[this.current] = {}
+        const contextParams: ContextResultType = { app, client, edgeql }
 
-        const castObject = (services: any, arg: string) => {
-            return this.provideMapper[arg]
-                ? context[this.current][arg]
-                : services[arg]
-        }
+        for (const componentType in this.provideMapper) {
+            if (this.current.export[componentType as keyof DomainExport] === undefined) continue
 
-        for (const objectType in this.provideMapper) {
-            if (this.domainHandlers[objectType as keyof DomainExport] === undefined) continue
-            const handlerExpression = this.provideMapper[objectType as keyof typeof this.provideMapper][0]
+            const DomainComponent = this.current.export[componentType as keyof DomainExport] as DomainComponentInterface
+            const handlerArgs = this.provideMapper[componentType as keyof typeof this.provideMapper]
+            const domainObject = classToObject(
+                new DomainComponent(handlerArgs.reduce((acc, arg) => (
+                    { ...acc, [arg]: this.context[arg] ?? contextParams[arg] }
+                ), {}))
+            )
 
-            // Extract arguments from the expression
-            const handlerArgs = handlerExpression.split(',').map(part => part.trim())
-            const ClassComponent = this.domainHandlers[objectType as keyof DomainExport]
+            if ('plugin' === componentType && 'proxies' in domainObject) {
+                const currentProxy = DomainProxyManager.castProxyConfig(domainObject.proxies)
 
-            if (typeof ClassComponent === 'function') {
-                const args = [handlerArgs.reduce((acc, arg) => ({ ...acc, [arg]: castObject(context, arg) }), {})]
-                const domainMethods = handler.apply(null, args)
-
-                context[this.current][objectType] = DomainProxyManager.applyProxyToComponent(
-                    this.current, objectType, domainMethods, proxyConfig
+                proxies = DomainProxyManager.mergeProxyConfigs(
+                    proxies,
+                    currentProxy
                 )
             }
+
+            this.context[componentType] = DomainProxyManager.applyProxyToComponent(
+                this.current.name,
+                componentType,
+                domainObject,
+                proxies,
+                this.globalContext
+            )
         }
 
         return {
-            [this.current]: context[this.current],
-            ...(context[this.current].routeHandler
-                ? { router: registerDomainRoutes.execute(router, context[this.current].routeHandler) }
+            [this.current.name]: this.context,
+            ...(this.context.routeHandler
+                ? { router: registerDomainRoutes.execute(router, this.context.routeHandler) }
                 : {})
         }
     }

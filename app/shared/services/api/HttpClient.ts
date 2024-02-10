@@ -1,7 +1,7 @@
-class HttpClient {
+export class HttpClient {
     options: any
 
-    constructor(baseUrl: string, headers: any) {
+    constructor(baseUrl: string, headers: any = {}) {
         this.options = {
             baseUrl,
             headers: {
@@ -11,7 +11,7 @@ class HttpClient {
         }
     }
 
-    handleResponse = async (response: any) => {
+    async handleResponse(response: any) {
         if (!response.ok) {
             throw new Error(await response.text())
         }
@@ -19,19 +19,19 @@ class HttpClient {
         return await response.json()
     }
 
-    get = async (path: string) => {
+    async get(urlPath: string) {
         const response = await fetch(
-            new URL(path, this.options.baseUrl), {
+            new URL(urlPath, this.options.baseUrl), {
             ...this.options,
             method: 'GET'
         })
 
-        return this.handleResponse(response)
+        return await this.handleResponse(response)
     }
 
-    post = async (path: string, body = {}) => {
+    async post(urlPath: string, body = {}) {
         const response = await fetch(
-            new URL(path, this.options.baseUrl), {
+            new URL(urlPath, this.options.baseUrl), {
             ...this.options,
             method: 'POST',
             ...(Object.keys(body).length
@@ -40,10 +40,6 @@ class HttpClient {
             ),
         })
 
-        return this.handleResponse(response)
+        return await this.handleResponse(response)
     }
 }
-
-const createRequestClient = (baseUrl: string, headers = {}) => new HttpClient(baseUrl, headers)
-
-export default createRequestClient

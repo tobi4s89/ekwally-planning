@@ -1,66 +1,55 @@
-import { User as UserNamespace, ext } from '_generated/interfaces'
-import { RepositoryContextType, RepositoryType } from '_shared/types'
+import { User as UserNamespace } from '_generated/interfaces'
+import { DomainRepositoryInterface } from '_shared/types/interfaces'
+import { DomainRepository } from '_shared/services/domains'
 
-export default function UserRepository(context: RepositoryContextType): RepositoryType {
-    const e = context.edgeql
-    const Identity: ext.auth.Identity = e.ext.auth.Identity
-    const Base = e.User.Base
-    const Account = e.User.Account
+export default class UserRepository extends DomainRepository
+    implements DomainRepositoryInterface {
 
-    return {
+    public create(data: UserNamespace.Account) {
+        const Account = this.queryModel.User.Account
+        const Identity = this.queryModel.ext.auth.Identity
 
-        /**
-         * @param {UserNamespace.Account} data
-         * @return {Promise<UserNamespace.Account>}
-         */
-        create: (data: UserNamespace.Account): Promise<UserNamespace.Account> => {
-            return e.insert(Account, {
-                first_name: data.first_name,
-                last_name: data.last_name,
-                identity: e.select(Identity, () => ({
-                    filter_single: { id: data.identity }
-                }))
-            })
-        },
+        return this.queryModel.insert(Account, {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            identity: this.queryModel.select(Identity, () => ({
+                filter_single: { id: data.identity }
+            }))
+        })
+    }
 
-        /**
-         * @param {string} id
-         * @return {type}
-         */
-        delete: (id: string) => {
-            return e.delete(Base, () => (
-                { filter_single: { id } }
-            ))
-        },
+    public delete(id: string) {
+        const Base = this.queryModel.User.Base
 
-        /**
-         * @param {string} id
-         * @return {Promise<UserNamespace.Account | null>}
-         */
-        findById: (id: string): Promise<UserNamespace.Account | null> => e.select(Account, () => ({
+        return this.queryModel.delete(Base, () => (
+            { filter_single: { id } }
+        ))
+    }
+
+    public findById(id: string): Promise<UserNamespace.Account | null> {
+        const Account = this.queryModel.User.Account
+
+        return this.queryModel.select(Account, () => ({
             ...Account['*'],
             filter_single: { id }
-        })),
+        }))
+    }
 
-        /**
-         * @return {Promise<UserNamespace.Account[]>}
-         */
-        getAll: (): Promise<UserNamespace.Account[]> => {
-            return e.select(Account, () => ({ ...Account['*'] }))
-        },
+    public getAll(): Promise<UserNamespace.Account[]> {
+        const Account = this.queryModel.User.Account
 
-        /**
-         * 
-         * @param data 
-         * @returns 
-         */
-        update: (data: UserNamespace.Account): Promise<UserNamespace.Account | null> => {
-            return e.params({ id: e.uuid }, (params: { id: string }) => {
-                return e.update(Account, () => ({
-                    filter_single: { id: params.id },
-                    set: data,
-                }))
-            })
-        },
+        return this.queryModel.select(Account, () => ({ ...Account['*'] }))
+    }
+
+    public update(data: UserNamespace.Account): Promise<UserNamespace.Account | null> {
+        const q = this.queryModel
+        const Account = this.queryModel.User.Account
+
+        return q.params({ id: q.uuid }, (params: { id: string }) => {
+            return q.update(Account, () => ({
+                filter_single: { id: params.id },
+                set: data,
+            }))
+        })
     }
 }

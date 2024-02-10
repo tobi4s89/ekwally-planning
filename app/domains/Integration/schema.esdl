@@ -19,6 +19,6 @@ module Integration {
 
     type EmailPassword extending Base {
         required property email: str;
-        required property password_hash: str;
+        required property password_hash: bytes;
     };
 }

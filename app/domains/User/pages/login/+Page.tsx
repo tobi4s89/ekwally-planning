@@ -1,7 +1,7 @@
 import { PureComponent } from 'react'
 
 import { AccountLogin } from '../../components'
-import { createHttpClient } from '_shared/services'
+import { HttpClient } from '_shared/services/api'
 
 type MyState = {
     user: any,
@@ -45,9 +45,8 @@ class AccountLoginPage extends PureComponent<{}, MyState> {
         const { user } = this.state
 
         try {
-            const request = createHttpClient(window.location.origin)
-
-            await request.post('/auth/signin', user)
+            const http = new HttpClient(window.location.origin)
+            await http.post('/auth/signin', user)
         } catch (error) {
             console.error('There was an error submitting the form:', error)
         }

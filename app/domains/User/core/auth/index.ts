@@ -1,2 +1,1 @@
-export { default } from './authMiddleware'
-
+export { default } from './AuthMiddleware'

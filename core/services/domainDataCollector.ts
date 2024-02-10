@@ -1,13 +1,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { root } from '../../express-entry'
-import {
-    DomainExport,
-    DomainHandler,
-    DomainProxyConfig,
+import type {
     DomainDirectory,
-    DomainObject
-} from './index'
+    DomainObject,
+} from '../types'
 
 export class DomainDataCollector {
     domains: DomainObject[]
@@ -73,10 +70,5 @@ export class DomainDataCollector {
     public getDomainByName(name: string): DomainObject {
         this._ensureExists(name)
         return this.domains.find(domain => domain.name === name) as DomainObject
-    }
-
-    public getExportTypeByDomain(name: string, type: keyof DomainExport): DomainHandler | DomainProxyConfig {
-        const domain = this.getDomainByName(name)
-        return domain.export[type] as DomainHandler
     }
 }
