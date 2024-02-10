@@ -15,7 +15,7 @@ export interface DomainMiddlewareInterface {
 }
 
 export interface DomainPluginInterface {
-    transactionService: DomainTransactionService
+    transactionService: DomainTransactionServiceInterface
     proxies: { [key: string]: { [key: string]: ProxyConfigEntry } }
     [methodName: string]: Function<Promise<any>>
 }

@@ -1,8 +1,7 @@
 import { DomainPlugin } from '_shared/services/domains'
-import { DomainPluginInterface } from '_shared/types/interfaces'
+import UserIntegrationService from '../core/UserIntegrationService'
 
-export default class UserIntergrationPlugin extends DomainPlugin
-    implements DomainPluginInterface {
+export default class UserIntergrationPlugin extends DomainPlugin {
 
     /**
      * Define plugin methods by domain type
@@ -19,19 +18,24 @@ export default class UserIntergrationPlugin extends DomainPlugin
      * @param callback 
      * @returns 
      */
-    async createUserIntegration(args: any, callback: Function, context: any) {
-        const [data] = args
-        const integrationData = {
+    async createUserIntegration(args: any, callback: Function, { Integration: { transactionService: IntegrationService } }: any) {
+        const user = await callback(...args)
+        const integration = await IntegrationService.createIntegration({
             name: 'Picnic Integratie Tobias boodschappen',
             type: 'emailPassword',
-            email: 'tvanegten@hotmail.com',
-            password: 'tobbrzb'
+            email: 'email@hotmail.com',
+            password: 'password'
+        })
+
+        const userIntegrationData = {
+            user: user.id,
+            integration: integration.id
         }
-        const userId = data.identity
-        const integrationId = await context.Integration.transactionService.createIntegration(integrationData)
 
-        console.log(userId, integrationId)
+        await (this.transactionService as UserIntegrationService)
+            .createRelation(userIntegrationData)
 
-        return await callback(...args)
+        /** Don't break the flow */
+        return user
     }
 }

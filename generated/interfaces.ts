@@ -132,8 +132,8 @@ export namespace ext {
 }
 export namespace UserIntegration {
   export interface Relation extends std.$Object {
-    "integration"?: Integration.Base | null;
-    "user"?: User.Base | null;
+    "integration": Integration.Base;
+    "user": User.Base;
   }
 }
 export namespace cfg {

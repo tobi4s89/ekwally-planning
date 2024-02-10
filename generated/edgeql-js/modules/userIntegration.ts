@@ -6,8 +6,8 @@ import type * as _std from "./std";
 import type * as _Integration from "./Integration";
 import type * as _User from "./User";
 export type $RelationλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
-  "integration": $.LinkDesc<_Integration.$Base, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "user": $.LinkDesc<_User.$Base, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "integration": $.LinkDesc<_Integration.$Base, $.Cardinality.One, {}, false, false,  false, false>;
+  "user": $.LinkDesc<_User.$Base, $.Cardinality.One, {}, false, false,  false, false>;
 }>;
 type $Relation = $.ObjectType<"UserIntegration::Relation", $RelationλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

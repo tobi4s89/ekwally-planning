@@ -1,5 +1,4 @@
 import { PureComponent } from 'react'
-import { redirect } from 'vike/abort'
 import { AccountCreate } from '../../components'
 import { HttpClient } from '_shared/services/api'
 

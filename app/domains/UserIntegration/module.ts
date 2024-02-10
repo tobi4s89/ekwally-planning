@@ -1,10 +1,13 @@
+import * as Module from './core'
 import { default as Plugin } from './plugins'
 
 const registration = {
     name: 'UserIntegration',
     type: 'relation',
     export: {
-        plugin: Plugin
+        dataAccessLayer: Module.UserIntegrationRepository,
+        plugin: Plugin,
+        transactionService: Module.UserIntegrationService,
     }
 }
 

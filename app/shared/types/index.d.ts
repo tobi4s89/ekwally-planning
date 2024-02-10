@@ -11,6 +11,7 @@ export { NextFunction, Request, Response } from 'express'
 export { Application }
 
 export type RouteHandlers = { [path: string]: RequestHandler[] }
+export type RouteType = { get?: RouteHandlers, post?: RouteHandlers }
 
 export declare module '@small-tech/https'
 export declare module '@small-tech/cross-platform-hostname'

@@ -1,8 +1,8 @@
-import { DomainComponent, DomainTransactionService } from './index'
+import { DomainComponent } from './index'
 import { ComponentContextType } from '../../types'
 
 export abstract class DomainPlugin extends DomainComponent {
-    transactionService: DomainTransactionService
+    transactionService: any
 
     constructor(context: ComponentContextType) {
         super(context)
