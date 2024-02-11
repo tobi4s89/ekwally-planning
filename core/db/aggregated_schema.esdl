@@ -13,7 +13,7 @@ module Integration {
     }
 
     type Api extending Base {
-        required property api_key: str;
+        required property api_url: str;
         required property api_token: str;
     };
 

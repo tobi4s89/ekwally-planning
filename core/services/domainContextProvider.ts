@@ -61,7 +61,7 @@ export class DomainContextProvider {
             )
 
             if ('plugin' === componentType && 'proxies' in domainObject) {
-                const currentProxy = DomainProxyManager.castProxyConfig(domainObject.proxies)
+                const currentProxy = DomainProxyManager.castProxyConfig(domainObject.proxies, this.current.name)
 
                 proxies = DomainProxyManager.mergeProxyConfigs(
                     proxies,

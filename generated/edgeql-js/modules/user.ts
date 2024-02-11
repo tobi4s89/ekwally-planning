@@ -14,7 +14,7 @@ type $Base = $.ObjectType<"User::Base", $BaseλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
   {identity: {__element__: _auth.$Identity, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $Base = $.makeType<$Base>(_.spec, "77b27788-b184-11ee-b9b4-4f3ba5aca779", _.syntax.literal);
+const $Base = $.makeType<$Base>(_.spec, "8e045eb6-c8bd-11ee-b4d4-c51a8de80889", _.syntax.literal);
 
 const Base: $.$expr_PathNode<$.TypeSet<$Base, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Base, $.Cardinality.Many), null);
 
@@ -25,7 +25,7 @@ export type $AccountλShape = $.typeutil.flatten<$BaseλShape & {
 type $Account = $.ObjectType<"User::Account", $AccountλShape, null, [
   ...$Base['__exclusives__'],
 ]>;
-const $Account = $.makeType<$Account>(_.spec, "77c75342-b184-11ee-93c6-918b52e4b9a2", _.syntax.literal);
+const $Account = $.makeType<$Account>(_.spec, "8e11ca06-c8bd-11ee-989d-65231cd96da9", _.syntax.literal);
 
 const Account: $.$expr_PathNode<$.TypeSet<$Account, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Account, $.Cardinality.Many), null);
 
@@ -34,7 +34,7 @@ export type $currentUserλShape = $.typeutil.flatten<$BaseλShape & {
 type $currentUser = $.ObjectType<"User::currentUser", $currentUserλShape, null, [
   ...$Base['__exclusives__'],
 ]>;
-const $currentUser = $.makeType<$currentUser>(_.spec, "77b983ac-b184-11ee-bbd5-0f89841db3f5", _.syntax.literal);
+const $currentUser = $.makeType<$currentUser>(_.spec, "8e0b80ec-c8bd-11ee-8d9c-ab8832245ccb", _.syntax.literal);
 
 const currentUser: $.$expr_PathNode<$.TypeSet<$currentUser, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($currentUser, $.Cardinality.Many), null);
 
@@ -44,7 +44,7 @@ const $User__globals: {  currentUser: _.syntax.$expr_Global<
               $.Cardinality.Many
               >} = {  currentUser: _.syntax.makeGlobal(
               "User::currentUser",
-              $.makeType(_.spec, "77b983ac-b184-11ee-bbd5-0f89841db3f5", _.syntax.literal),
+              $.makeType(_.spec, "8e0b80ec-c8bd-11ee-8d9c-ab8832245ccb", _.syntax.literal),
               $.Cardinality.Many) as any};
 
 

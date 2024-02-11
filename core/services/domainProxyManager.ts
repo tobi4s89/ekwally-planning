@@ -4,9 +4,20 @@ import type {
     ProxyConfig,
     CastedProxyConfig
 } from '../types'
+import { pascalCaseToArray } from '../utils/pascalCaseToArray'
 
 class DomainProxyManager {
-    static castProxyConfig(config: ProxyConfig): CastedProxyConfig {
+    private static _registeredProxies: { [key: string]: any } = {}
+
+    static get registeredProxies() {
+        return this._registeredProxies
+    }
+
+    static set registeredProxies(value: { [key: string]: any }) {
+        this._registeredProxies = { ...this._registeredProxies, ...value }
+    }
+
+    static castProxyConfig(config: ProxyConfig, name: string): CastedProxyConfig {
         const castedConfig: CastedProxyConfig = {}
 
         for (const [domainType, methods] of Object.entries(config)) {
@@ -17,6 +28,7 @@ class DomainProxyManager {
 
             for (const [originalMethod, proxyMethod] of Object.entries(methods)) {
                 castedConfig[domain][type][originalMethod] = proxyMethod
+                DomainProxyManager.registeredProxies = { [name]: castedConfig[domain][type][originalMethod] }
             }
         }
 
@@ -46,7 +58,7 @@ class DomainProxyManager {
             }
         }
 
-        return mergedConfig;
+        return mergedConfig
     }
 
     static applyProxyToComponent(
@@ -62,30 +74,41 @@ class DomainProxyManager {
         const componentProxyConfig = domainConfig[componentType]
         if (!componentProxyConfig) return componentMethods
 
-        return Object.keys(componentMethods).reduce((proxiedMethods: any, methodName) => {
-            const originalMethod = componentMethods[methodName];
-            if (componentProxyConfig[methodName] && typeof originalMethod === 'function') {
-                // Get the list of plugins for the method
-                const plugins = componentProxyConfig[methodName] as ProxyConfigFunction[];
+        const filterGlobalContext = (filter: string[]) => {
+            return filter.reduce((acc: any, name) => {
+                if (globalContext[name]) {
+                    acc[name] = globalContext[name]
+                }
+                return acc;
+            }, {});
+        }
 
-                // Start with the original method as the base for chaining
+        return Object.keys(componentMethods).reduce((proxiedMethods: any, methodName) => {
+            const originalMethod = componentMethods[methodName]
+            if (componentProxyConfig[methodName] && typeof originalMethod === 'function') {
+                const plugins = componentProxyConfig[methodName] as ProxyConfigFunction[]
                 let chainedMethod = originalMethod;
 
-                // Apply each plugin as a layer of proxy around the previous one
                 for (const plugin of plugins) {
                     chainedMethod = ((currentMethod) => {
+                        const registeredProxies = this._registeredProxies
                         return new Proxy(currentMethod, {
                             async apply(target, thisArg, argumentsList) {
                                 const callback = async (...args: any) => Reflect.apply(target, thisArg, args);
-                                const result = await plugin(argumentsList, callback, globalContext);
+                                let relation: string[] = [];
+                                for (const [name, proxy] of Object.entries(registeredProxies)) {
+                                    if (proxy === plugin) {
+                                        relation = pascalCaseToArray(name)
+                                        break
+                                    }
+                                }
 
-                                return result;
+                                return await plugin(argumentsList, callback, filterGlobalContext(relation));
                             }
                         });
                     })(chainedMethod);
                 }
 
-                // Assign the fully chained method as the proxied method
                 proxiedMethods[methodName] = chainedMethod;
             } else {
                 proxiedMethods[methodName] = originalMethod;

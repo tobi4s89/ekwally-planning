@@ -1,7 +1,7 @@
 import { DomainPlugin } from '_shared/services/domains'
 import UserIntegrationService from '../core/UserIntegrationService'
 
-export default class UserIntergrationPlugin extends DomainPlugin {
+export default class UserIntergrationPlugin<T> extends DomainPlugin {
 
     /**
      * Define plugin methods by domain type
@@ -18,7 +18,8 @@ export default class UserIntergrationPlugin extends DomainPlugin {
      * @param callback 
      * @returns 
      */
-    async createUserIntegration(args: any, callback: Function, { Integration: { transactionService: IntegrationService } }: any) {
+    async createUserIntegration(args: any, callback: Function, context: any): Promise<T> {
+        const IntegrationService = context.Integration.transactionService
         const user = await callback(...args)
         const integration = await IntegrationService.createIntegration({
             name: 'Picnic Integratie Tobias boodschappen',

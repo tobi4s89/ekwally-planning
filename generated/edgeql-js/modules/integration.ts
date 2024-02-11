@@ -15,18 +15,18 @@ export type $BaseλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c2
 type $Base = $.ObjectType<"Integration::Base", $BaseλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
 ]>;
-const $Base = $.makeType<$Base>(_.spec, "77b9c9fc-b184-11ee-896f-d9b4ca7f0854", _.syntax.literal);
+const $Base = $.makeType<$Base>(_.spec, "8e0babee-c8bd-11ee-b3d8-43e13434d995", _.syntax.literal);
 
 const Base: $.$expr_PathNode<$.TypeSet<$Base, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Base, $.Cardinality.Many), null);
 
 export type $ApiλShape = $.typeutil.flatten<$BaseλShape & {
   "api_token": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
-  "api_key": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
+  "api_url": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, false>;
 }>;
 type $Api = $.ObjectType<"Integration::Api", $ApiλShape, null, [
   ...$Base['__exclusives__'],
 ]>;
-const $Api = $.makeType<$Api>(_.spec, "77bc77e2-b184-11ee-bd83-1bceae6c7709", _.syntax.literal);
+const $Api = $.makeType<$Api>(_.spec, "8e0d1574-c8bd-11ee-b64b-33c3b10799c0", _.syntax.literal);
 
 const Api: $.$expr_PathNode<$.TypeSet<$Api, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Api, $.Cardinality.Many), null);
 
@@ -37,7 +37,7 @@ export type $EmailPasswordλShape = $.typeutil.flatten<$BaseλShape & {
 type $EmailPassword = $.ObjectType<"Integration::EmailPassword", $EmailPasswordλShape, null, [
   ...$Base['__exclusives__'],
 ]>;
-const $EmailPassword = $.makeType<$EmailPassword>(_.spec, "77bb3094-b184-11ee-bdc2-e5d04fddc872", _.syntax.literal);
+const $EmailPassword = $.makeType<$EmailPassword>(_.spec, "8e0e74f0-c8bd-11ee-a476-619da95fbdf1", _.syntax.literal);
 
 const EmailPassword: $.$expr_PathNode<$.TypeSet<$EmailPassword, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($EmailPassword, $.Cardinality.Many), null);
 

@@ -1,15 +1,20 @@
-export const pascalCaseToArray = (pascalCaseName: string) => {
+export const pascalCaseToArray = (input: string) => {
     const result: string[] = []
-    let startIndex = 0
+    let currentWord = ''
 
-    for (let i = 1; i < pascalCaseName.length; i++) {
-        if (pascalCaseName[i] === pascalCaseName[i].toLowerCase()) {
-            result.push(pascalCaseName.substring(startIndex, i))
-            startIndex = i
+    for (const char of input) {
+        if (char === char.toUpperCase()) {
+            if (currentWord) {
+                result.push(currentWord)
+                currentWord = ''
+            }
         }
+        currentWord += char
     }
 
-    result.push(pascalCaseName.substring(startIndex))
+    if (currentWord) {
+        result.push(currentWord)
+    }
 
     return result
 }

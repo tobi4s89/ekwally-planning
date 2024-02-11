@@ -1,4 +1,4 @@
-CREATE MIGRATION m1eqwuvgziadrcbkvjpkcso5c6hgbyuvrjeybew7t7p34vnanu3eka
+CREATE MIGRATION m1mcqyit3idziul6o56o7v2woaj5fy6drtckfyhtdfhde3y6c4sedq
     ONTO initial
 {
   CREATE EXTENSION pgcrypto VERSION '1.3';
@@ -28,17 +28,17 @@ CREATE MIGRATION m1eqwuvgziadrcbkvjpkcso5c6hgbyuvrjeybew7t7p34vnanu3eka
       };
       CREATE REQUIRED PROPERTY name: std::str;
   };
-  CREATE TYPE Integration::Picnic EXTENDING Integration::Base {
+  CREATE TYPE Integration::Api EXTENDING Integration::Base {
+      CREATE REQUIRED PROPERTY api_token: std::str;
+      CREATE REQUIRED PROPERTY api_url: std::str;
+  };
+  CREATE TYPE Integration::EmailPassword EXTENDING Integration::Base {
       CREATE REQUIRED PROPERTY email: std::str;
       CREATE REQUIRED PROPERTY password_hash: std::str;
   };
-  CREATE TYPE Integration::Trello EXTENDING Integration::Base {
-      CREATE REQUIRED PROPERTY api_key: std::str;
-      CREATE REQUIRED PROPERTY api_token: std::str;
-  };
   CREATE TYPE UserIntegration::Relation {
-      CREATE LINK integration: Integration::Base;
-      CREATE LINK user: User::Base;
+      CREATE REQUIRED LINK integration: Integration::Base;
+      CREATE REQUIRED LINK user: User::Base;
       CREATE CONSTRAINT std::exclusive ON ((.user, .integration));
       CREATE INDEX ON (.user);
   };
