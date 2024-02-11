@@ -1,9 +1,11 @@
 import { User as UserNamespace } from '_generated/interfaces'
 import { DomainTransactionService } from '_shared/services/domains'
 import { EdgeDB } from '_shared/types'
+import { DomainTransactionServiceInterface } from '_shared/types/interfaces'
 import { promiseHandler } from '_shared/utils'
 
-export default class UserService extends DomainTransactionService {
+export default class UserService extends DomainTransactionService
+    implements DomainTransactionServiceInterface {
 
     public createUser(data: UserNamespace.Account) {
         return promiseHandler.execute(data, async () => {

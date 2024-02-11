@@ -88,7 +88,6 @@ async function startServer() {
         if (routeMiddleware) app.use(routeMiddleware)
 
         Object.assign(domainContext, { [name]: currentContext })
-        console.log('--------------CURRENTCONTEXT-----', { [name]: currentContext })
     }
 
     /**

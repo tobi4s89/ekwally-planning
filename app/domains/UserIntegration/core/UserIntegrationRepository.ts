@@ -1,7 +1,9 @@
 import { UserIntegration as UserIntegrationNamespace } from '_generated/interfaces'
 import { DomainRepository } from '_shared/services/domains'
+import { DomainRepositoryInterface } from '_shared/types/interfaces'
 
-export default class IntegrationRepository extends DomainRepository {
+export default class IntegrationRepository extends DomainRepository
+    implements DomainRepositoryInterface {
 
     public create(data: UserIntegrationNamespace.Relation) {
         const Relation = this.queryModel.UserIntegration.Relation

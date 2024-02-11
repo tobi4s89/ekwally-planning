@@ -1,10 +1,11 @@
 import { sha256 } from '@edgedb/auth-core/dist/crypto'
-import { CreateIntegrationDataType, IntegrationTypeMapper, IntegrationTypeMapperValueOf } from '../types'
-
 import { Integration as IntegrationNamespace } from '_generated/interfaces'
 import { DomainRepository } from '_shared/services/domains'
+import { DomainRepositoryInterface } from '_shared/types/interfaces'
+import { CreateIntegrationDataType, IntegrationTypeMapper, IntegrationTypeMapperValueOf } from '../types'
 
-export default class IntegrationRepository extends DomainRepository {
+export default class IntegrationRepository extends DomainRepository
+    implements DomainRepositoryInterface {
 
     integrationTypeMapper: IntegrationTypeMapper = {
         api: this.queryModel.Integration.Api,

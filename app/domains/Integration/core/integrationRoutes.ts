@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from '_shared/types'
+import { DomainRouteInterface } from '_shared/types/interfaces'
 import { DomainRoute } from '_shared/services/domains'
 
-export default class IntegrationRoutes extends DomainRoute {
+export default class IntegrationRoutes extends DomainRoute
+    implements DomainRouteInterface {
 
     /**
      * 

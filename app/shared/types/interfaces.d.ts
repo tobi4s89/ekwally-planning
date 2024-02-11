@@ -23,10 +23,10 @@ export interface DomainPluginInterface {
 export interface DomainRepositoryInterface {
     queryModel: typeof EdgeQL
     create: Function<Promise<any>>
-    delete: Function<Promise<any>>
-    findById: Function<Promise<any>>
-    getAll: Function<Promise<any>>
-    update: Function<Promise<any>>
+    delete?: Function<Promise<any>>
+    findById?: Function<Promise<any>>
+    getAll?: Function<Promise<any>>
+    update?: Function<Promise<any>>
 }
 
 export interface DomainRouteInterface {

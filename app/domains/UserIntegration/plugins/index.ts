@@ -1,7 +1,9 @@
 import { DomainPlugin } from '_shared/services/domains'
 import UserIntegrationService from '../core/UserIntegrationService'
+import { DomainPluginInterface } from '_shared/types/interfaces'
 
-export default class UserIntergrationPlugin<T> extends DomainPlugin {
+export default class UserIntergrationPlugin<T> extends DomainPlugin
+    implements DomainPluginInterface {
 
     /**
      * Define plugin methods by domain type
